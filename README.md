@@ -23,6 +23,16 @@ please see Documentation for more details about installation and Getting started
 - **Comprehensive Documentation**: Detailed guides and examples to help you get started quickly and easily, with Demo apps to use it with native php apps or with laravel apps.
 - **Unit Tests**: include unit tests .
 
+---
+
+#### [demo Native PHP app](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo)  for using Gpdf with native PHP apps.
+
+---
+
+#### [demo Laravel app](https://github.com/omaralalwi/Gpdf-Laravel-Demo)  for using Gpdf with laravel apps.
+
+---
+
 ## Compatibility
 
 it is require at least `PHP 8.1` .
