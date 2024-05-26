@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage/>
+  <testsuites>
+    <testsuite name="Gpdf Tests">
+      <directory suffix=".php">tests/</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <junit outputFile="junit.xml"/>
+  </logging>
+</phpunit>

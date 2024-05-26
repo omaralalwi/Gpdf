@@ -1,0 +1,56 @@
+{
+    "name": "omaralalwi/gpdf",
+    "description": "Custom PDF wrapper supporting Arabic language",
+    "keywords": [
+        "omaralalwi",
+        "gpdf",
+        "pdf",
+        "arabic"
+    ],
+    "homepage": "https://github.com/omaralalwi/gpdf",
+    "license": "MIT",
+    "type": "library",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "omar alalwi",
+            "email": "omaralwi2010@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2|^8.3",
+        "dompdf/dompdf": "^3.0",
+        "khaled.alshamaa/ar-php": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Omaralalwi\\Gpdf\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Omaralalwi\\Gpdf\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --log-junit junit.xml",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Omaralalwi\\Gpdf\\GpdfServiceProvider"
+            ],
+            "aliases": {
+                "Gpdf": "Omaralalwi\\Gpdf\\Facade\\Gpdf"
+            }
+        }
+    }
+}
