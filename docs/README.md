@@ -10,11 +10,6 @@ Open Source HTML to PDF converter for PHP & Laravel Applications, supports Arabi
 
 Extends [dompdf](https://github.com/dompdf/dompdf) to add new features and solve problem like Arabic language support.
 
-## [Documentation](https://omaralalwi.github.io/Gpdf)
-
-
-## Introduction
-
 Open Source HTML to PDF converter for PHP & Laravel Applications
 
 Extends dompdf to add new features and solve problem like Arabic language support.
