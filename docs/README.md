@@ -98,8 +98,6 @@ and compy `vendor/omaralalwi/gpdf/config/gpdf.php` file to `/config` folder in r
 
 To generate a PDF, you can use the `Gpdf` class with either default settings or customized configurations.
 
-##### Default Settings
-
 ```php
 require_once __DIR__. '/vendor/autoload.php';
 
