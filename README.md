@@ -238,7 +238,6 @@ php vendor/omaralalwi/gpdf/scripts/install_font.php "tajawal" ./resources/fonts/
 - ### [dompdf](https://github.com/dompdf/dompdf)
 - ### [Ar-PHP](https://github.com/khaled-alshamaa/ar-php)
 
-
 ## Testing
 
 ```bash
