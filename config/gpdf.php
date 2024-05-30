@@ -1,6 +1,7 @@
 <?php
 
-use Omaralalwi\Gpdf\Enums\{GpdfDefaultSettings as GpdfDefault, GpdfSettingKeys as GpdfSet, GpdfDefaultSupportedFonts};
+use Omaralalwi\Gpdf\Enums\{GpdfDefaultSettings as GpdfDefault, GpdfSettingKeys as GpdfSet,
+    GpdfStorageDrivers, GpdfDefaultSupportedFonts};
 
 /**
  * Configuration file for the Gpdf package.
@@ -54,6 +55,15 @@ return [
      */
     GpdfSet::CHROOT => GpdfDefault::CHROOT,
 
+    GpdfSet::STORAGE_DRIVER => GpdfStorageDrivers::LOCAL, // local , s3
+
+    GpdfSet::AWS_BUCKET => '',
+
+    GpdfSet::AWS_REGION => '',
+
+    GpdfSet::AWS_KEY => '',
+
+    GpdfSet::AWS_SECRET => '',
     /**
      * Enable or disable entity conversion.
      * @var bool
