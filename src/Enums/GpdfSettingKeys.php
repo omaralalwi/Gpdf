@@ -8,7 +8,6 @@ class GpdfSettingKeys
     const FONT_DIR = 'fontDir';
     const FONT_CACHE = 'fontCache';
     const CHROOT = 'chroot';
-    const STORAGE_DRIVER = 'storage_driver'; // local , s3
     const STORAGE_PATH = 'storage_path';
     const AWS_BUCKET = 'aws_storage_bucket';
     const AWS_REGION = 'aws_storage_region';
