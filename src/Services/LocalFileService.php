@@ -17,21 +17,11 @@ class LocalFileService
      * @param string $pdfFile The content of the file.
      * @param string $path The path to store the file under.
      * @param string $fileName The name of the file.
-     * @return object|array An object representing the stored file.
+     * @return array An object representing the stored file.
      * @throws Exception If the file could not be stored.
      */
     public function store(string $pdfFile, string $path, string $fileName): array
     {
-        // Define the base directory
-        $baseDir = __DIR__; // or any other base directory you need
-
-        // TODO: update this before publish updates, change the level to 6 , depend on package path in vendor
-//        $rootPath = dirname(__DIR__, 6);
-        $rootPath = dirname(__DIR__, 3).'/Gpdf-Laravel-Demo/';
-//        $rootPath = dirname(__DIR__, 3).'/Gpdf-Native-PHP-Demo/';
-
-//        $this->logUpload('this is $rootPath', $rootPath);
-
         $fullDirPath = $this->getRealDirectoryPath($path);
         $fullFilePath = $this->getFullFilePath($fullDirPath, $fileName);
 
@@ -52,7 +42,6 @@ class LocalFileService
         }
 
         try {
-            // Read the file content
             $fileContent = file_get_contents($fullFilePath);
             if ($fileContent === false) {
                 throw new Exception("Failed to read file $fullFilePath");
@@ -62,7 +51,6 @@ class LocalFileService
             fclose($fileObject);
         }
 
-        // Build and return the response array
         return $this->buildResponseArray($fileObject, $fullDirPath, $path, $fileName);
     }
 
@@ -135,30 +123,24 @@ class LocalFileService
      * @return bool True if the file was streamed successfully, otherwise false.
      * @throws Exception If the file does not exist.
      */
-    public static function streamFromUrl(string $fileUrl)
+    public static function streamFromUrl(string $fileUrl, bool $verifySsl=true)
     {
-        $logFilePath = realpath(__DIR__ . '/../../logs/upload_log.txt');
-        file_put_contents($logFilePath, 'fileUrl' . PHP_EOL . $fileUrl . PHP_EOL, FILE_APPEND);
-
-        // Check if the file exists at the URL
         $headers = @get_headers($fileUrl);
         if ($headers && strpos($headers[0], '200') === false) {
             throw new Exception('File not found: ' . $fileUrl, 404);
         }
 
-        // Set PDF headers
         self::setPdfHeaders($fileUrl);
 
-        // TODO: make this it optional , let user decide if check about ssl or not
         $contextOptions = [
             "ssl" => [
-                "verify_peer" => false,
-                "verify_peer_name" => false,
+                "verify_peer" => $verifySsl,
+                "verify_peer_name" => $verifySsl,
             ],
         ];
+
         $context = stream_context_create($contextOptions);
 
-        // Read and output the file content
         $fileContent = file_get_contents($fileUrl, false, $context);
         if ($fileContent === false) {
             throw new Exception('Failed to read file: ' . $fileUrl);
@@ -167,11 +149,4 @@ class LocalFileService
         echo $fileContent;
         return true;
     }
-
-//    public static function streamFromUrl(string $fileUrl)
-//    {  // no need to check about file existence in this url, we checked when generate this url
-//        self::setPdfHeaders($fileUrl);
-//        return readfile($fileUrl) !== false;
-//    }
-
 }
