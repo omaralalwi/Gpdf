@@ -6,7 +6,7 @@
 
 # [Gpdf](https://github.com/omaralalwi/Gpdf) : HTML to PDF Converter for PHP & Laravel
 
-Open Source PHP Package for converting HTML to PDF in PHP & Laravel applications, with out-of-the-box support for Arabic content and other languages. Extends [dompdf](https://github.com/dompdf/dompdf) to add new features and solve issues like Arabic language support.
+Open Source PHP Package for converting HTML to PDF in PHP & Laravel applications, support store to s3,  with out-of-the-box support for Arabic content and other languages. Extends [dompdf](https://github.com/dompdf/dompdf) to add new features and solve issues like Arabic language support.
 
 ## Requirements
 
@@ -85,9 +85,11 @@ header('Content-Type: application/pdf');
 echo $pdfContent;
 ```
 
-### Storing Generated PDF Files
+### Storing Generated PDF Files ( Local || S3 )
 
 Save a PDF to a specific location using `generateWithStore`:
+
+**Note** By default it store files to local driver.
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
@@ -107,6 +109,15 @@ $pdfContent = $gpdf->generateWithStore($content, __DIR__ . '/storage/downloads/'
 header('Content-Type: application/pdf');
 echo $pdfContent;
 ```
+#### generateWithStore params
+
+| Parameter                           | Type   | Description                                                                                   |
+|-------------------------------------|--------|-----------------------------------------------------------------------------------------------|
+| `html file`                         | string | The HTML content to be stored.                                                                |
+| `store path or bucket name with s3` | string | The path where the file will be stored, with S3 store this should bucket name.                |
+| `file name`                         | string | The name of the file.                                                                         |
+| `with stream`                       | bool   | If you need to stream the file to the browser after storing, set this to `true`.              |
+| `sslVerify`                         | bool   | If `with stream` is set to `true`, you should set this to `true` in production to verify SSL. |
 
 ### [Demo Native PHP App](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo)
 please see this Demo Native PHP app contain more detailed examples and cases like pass dynamic parameters for html file & pass inline configs , .. and another cases.
@@ -146,6 +157,7 @@ public function generateSecondWayPdf(Gpdf $gpdf)
 Stream a PDF directly to the browser using `generateWithStream`:
 
 ```php
+// by default it store files to local driver (path should in public path).
 public function generateAndStream()
 {
     $html = view('pdf.example-2')->render();
@@ -157,17 +169,39 @@ public function generateAndStream()
 
 ### Storing Generated PDF Files
 
+#### Store Files To local
+
 Save a PDF to storage using `generateWithStore`:
 
+**Note** By default it store files to local driver (ensure that: the store path is access able for read and write).
+
+please see [generateWithStore params](#generateWithStore-params) .
 ```php
 public function generateAndStore()
 {
     $html = view('pdf.example-2')->render();
     $gpdf = app(Gpdf::class);
     $storePath = storage_path('app/downloads/users/');
-    $gpdf->generateWithStore($html, $storePath, 'test-stored-pdf-file');
-    return response(null, 200, ['Content-Type' => 'application/pdf']);
+    $gpdf->generateWithStore($html, $storePath, 'test-stored-pdf-file', true, false); // ssl verify should be true in production .
+    return $file['ObjectURL']; // return file url as string , to store in db or do any action
 }
+// may be you will face problems with stream in local, so you can disable ssl verify in local, but should enable it in production.
+```
+
+#### Store Files To S3
+same to store in local, just replace local path with bucket name, and replace `generateWithStore` with `generateWithStoreToS3` .
+
+**Note** Ensure you setup s3 configs in config file.
+```php
+    public function generateAndStoreToS3()
+    {
+        $data = $this->getDynamicParams();
+        $html = view('pdf.example-2',$data)->render();
+        $gpdf = app(Gpdf::class);
+        $bucketName = 'your_s3_bucket_name'; // should be read abel and write able .
+        $file = $gpdf->generateWithStoreToS3($html, $bucketName, 'test-store-pdf-fle', true, true); // with s36 the ssl verify will work in local or production (always secure).
+        return $file['ObjectURL']; // return file url as string , to store in db or do any action
+    }
 ```
 
 ### [Demo Laravel App](https://github.com/omaralalwi/Gpdf-Laravel-Demo)
@@ -224,6 +258,8 @@ php vendor/omaralalwi/gpdf/scripts/install_font.php "tajawal" ./resources/fonts/
 ## Features
 
 - Compatibility with any Standard PHP application, Or framework.
+- store pdf files to S3 or local storage directly.
+- stream pdf files from urls (local or s3).
 - Supports 17 fonts by default, including 7 that support Arabic.
 - Allows for the installation of custom fonts.
 - Provides easy integration with Laravel applications.
@@ -235,8 +271,8 @@ php vendor/omaralalwi/gpdf/scripts/install_font.php "tajawal" ./resources/fonts/
 ---
 
 ## Thanks
-- ### [dompdf](https://github.com/dompdf/dompdf) .
-- ### [Ar-PHP](https://github.com/khaled-alshamaa/ar-php).
+- ### [dompdf](https://github.com/dompdf/dompdf)
+- ### [Ar-PHP](https://github.com/khaled-alshamaa/ar-php)
 
 
 ## Testing

@@ -8,12 +8,16 @@
         "arabic",
         "arabicpdf",
         "Gpdf",
+        "dompdf",
         "PDF",
         "Arabic",
         "Arabic PDF",
         "PDF PHP",
         "PGPDF",
         "PDF Package",
+        "PDF to s3",
+        "s3 and pdf",
+        "store pdf to s3",
         "PHP PDF Package",
         "PDF Generation",
         "PDF Generation Library",
@@ -47,7 +51,7 @@
     "homepage": "https://github.com/omaralalwi/gpdf",
     "license": "MIT",
     "type": "library",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "authors": [
         {
             "name": "omar alalwi",
@@ -57,6 +61,7 @@
     ],
     "require": {
         "php": "^8.1|^8.2|^8.3",
+        "aws/aws-sdk-php": "^3.308",
         "dompdf/dompdf": "^3.0",
         "khaled.alshamaa/ar-php": "^6.3"
     },

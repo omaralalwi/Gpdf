@@ -9,6 +9,10 @@ class GpdfSettingKeys
     const FONT_CACHE = 'fontCache';
     const CHROOT = 'chroot';
     const STORAGE_PATH = 'storage_path';
+    const AWS_BUCKET = 'aws_storage_bucket';
+    const AWS_REGION = 'aws_storage_region';
+    const AWS_KEY = 'aws_storage_key';
+    const AWS_SECRET = 'aws_storage_secret';
     const CONVERT_ENTITIES = 'convert_entities';
     const ALLOWED_PROTOCOLS = 'allowedProtocols';
     const ARTIFACT_PATH_VALIDATION = 'artifactPathValidation';

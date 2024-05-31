@@ -4,10 +4,18 @@ namespace Omaralalwi\Gpdf\Builders;
 
 use ArPHP\I18N\Arabic;
 use Dompdf\Dompdf;
+use Aws\Exception\AwsException;
+use Omaralalwi\Gpdf\Clients\S3Client;
+use Omaralalwi\Gpdf\Services\{S3Service, LocalFileService};
+use Omaralalwi\Gpdf\Enums\GpdfSettingKeys;
+use Omaralalwi\Gpdf\Traits\HasGpdfLog;
+use Omaralalwi\Gpdf\Traits\HasFile;
 
 class PdfBuilder
 {
-    protected $dompdf;
+    use HasGpdfLog, HasFile;
+
+    protected Dompdf $dompdf;
 
     public function __construct(Dompdf $dompdf)
     {
@@ -99,47 +107,30 @@ class PdfBuilder
         }
     }
 
-    /**
-     * Save the generated PDF to a specified file path.
-     *
-     * @param string $htmlContent
-     * @param string $filePath
-     * @param string $fileName
-     * @return void
-     */
-    public function buildAndStore(string $htmlContent, string $filePath, string $fileName): void
+    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName, bool $withStream = false, bool $verifySsl=true)
     {
         try {
-            $formattedContent = $this->formatArabic($htmlContent);
-            $pdf = $this->dompdf;
-            $pdf->loadHtml($formattedContent);
-            $pdf->render();
+            $this->preparePdf($htmlContent);
+            $pdfContent = $this->dompdf->output();
+            $generatedFile = $this->storeFile($storageService, $pdfContent, $filePath, $fileName);
+            $formattedGeneratedFile = $this->appendObjectURLToGeneratedFile($storageService, $generatedFile);
 
-            $this->checkStoraPath($filePath);
-            $fullFilePath = $this->getFullFilePath($filePath, $fileName);
-
-            // Check if the file exists and delete it if it does
-            if (file_exists($fullFilePath)) {
-                unlink($fullFilePath);
+            if($withStream) {
+                $storageService->streamFromUrl($formattedGeneratedFile['ObjectURL'], $verifySsl);
             }
 
-            // Create a new file with the PDF content
-            file_put_contents($fullFilePath, $pdf->output());
+            return $formattedGeneratedFile;
+            // stream from url not available with local storage driver.
         } catch (\Exception $e) {
-            echo 'An error occurred while saving the PDF: '. $e->getMessage();
+            echo 'An error occurred while saving the PDF: ' . $e->getMessage();
         }
     }
 
-    public function checkStoraPath($storePath)
+    public function appendObjectURLToGeneratedFile($storageService, $generatedFile)
     {
-        if (!is_dir($storePath)) {
-            mkdir($storePath, 0755, true);
-        }
-    }
-
-    public function getFullFilePath($filePath, $fileName)
-    {
-        return $filePath.'/'.$fileName;
+        $fileUrl = $storageService->getFileUrl($generatedFile);
+        $generatedFile['ObjectURL'] = $fileUrl;
+        return $generatedFile;
     }
 
     /**
@@ -184,4 +175,23 @@ class PdfBuilder
         }
         return $subject;
     }
+
+    protected function storeFile(S3Service|LocalFileService $storageService, $pdfFile, $filePath, $fileName)
+    {
+        try {
+            return $storageService->store($pdfFile, $filePath, $fileName);
+        } catch (\Exception $e) {
+            echo $e->getMessage() . "\n";
+        }
+    }
+
+    protected function streamFromUrl(S3Service|LocalFileService $storageService, $fileUrl)
+    {
+        try {
+             return $storageService->streamFromUrl($fileUrl);
+        } catch (\Exception $e) {
+            echo $e->getMessage() . "\n";
+        }
+    }
+
 }
