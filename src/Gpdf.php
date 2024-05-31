@@ -46,7 +46,7 @@ class Gpdf
      */
     public function generateWithStore(string $content, ?string $destinationPath,?string $fileName = null, bool $withStream = false, bool $verifySsl=true): array
     {
-        $destinationPath = $destinationPath ?: $this->gpdfConfig->get(GpdfSet::STORAGE_PATH );
+        $destinationPath = $destinationPath ?: $this->gpdfConfig->get(GpdfSet::STORAGE_PATH);
         return $this->getPdfBuilder()->buildAndStore($this->getStorageService($this->gpdfConfig), $content, $destinationPath, DompdfFactory::generateFileName($fileName), $withStream, $verifySsl);
     }
 
