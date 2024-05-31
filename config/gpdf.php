@@ -55,9 +55,7 @@ return [
      */
     GpdfSet::CHROOT => GpdfDefault::CHROOT,
 
-    GpdfSet::STORAGE_DRIVER => GpdfStorageDrivers::LOCAL, // local , s3
-
-    GpdfSet::STORAGE_PATH => GpdfDefault::STORAGE_PAT,
+    GpdfSet::STORAGE_PATH => GpdfDefault::STORAGE_PATH,
 
     GpdfSet::AWS_BUCKET => '',
 
