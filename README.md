@@ -85,29 +85,33 @@ header('Content-Type: application/pdf');
 echo $pdfContent;
 ```
 
-### Storing Generated PDF Files ( Local || S3 )
+#### Store Files To Local
 
-Save a PDF to a specific location using `generateWithStore`:
+Save a PDF files to local storage using `generateWithStore`:
 
 **Note** By default it store files to local driver.
 
 ```php
+<?php
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Omaralalwi\Gpdf\Gpdf;
 use Omaralalwi\Gpdf\GpdfConfig;
+use Omaralalwi\Gpdf\Enums\{GpdfDefaultSettings, GpdfSettingKeys, GpdfDefaultSupportedFonts};
 
 $htmlFile = __DIR__ . '/contents/example-1.html';
 $content = file_get_contents($htmlFile);
 
-$gpdfConfigFile = require_once 'config/gpdf.php';
+$gpdfConfigFile = require_once ('config/gpdf.php');
 $config = new GpdfConfig($gpdfConfigFile);
 
 $gpdf = new Gpdf($config);
-$pdfContent = $gpdf->generateWithStore($content, __DIR__ . '/storage/downloads/', 'stored-pdf-file');
+$sslVerify = false;
+$file = $gpdf->generateWithStore($content,null,null, false , $sslVerify); // $sslVerify must be true in production
+$fileUrl = $file['ObjectURL'];
 
-header('Content-Type: application/pdf');
-echo $pdfContent;
+return $fileUrl;  // get file url as string to store it in db or do any action
 ```
 #### generateWithStore params
 
@@ -118,6 +122,31 @@ echo $pdfContent;
 | `file name`                         | string | The name of the file.                                                                         |
 | `with stream`                       | bool   | If you need to stream the file to the browser after storing, set this to `true`.              |
 | `sslVerify`                         | bool   | If `with stream` is set to `true`, you should set this to `true` in production to verify SSL. |
+
+#### Store Files To S3
+same to store in local, just replace local path with bucket name, and replace `generateWithStore` with `generateWithStoreToS3` .
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Omaralalwi\Gpdf\Gpdf;
+use Omaralalwi\Gpdf\GpdfConfig;
+use Omaralalwi\Gpdf\Enums\{GpdfDefaultSettings, GpdfSettingKeys, GpdfDefaultSupportedFonts};
+
+$htmlFile = __DIR__ . '/contents/example-1.html';
+$content = file_get_contents($htmlFile);
+
+$gpdfConfigFile = require_once ('config/gpdf.php');
+$config = new GpdfConfig($gpdfConfigFile);
+
+$gpdf = new Gpdf($config);
+$fileName = "pdf-file-with-store-to-s3";
+$sslVerify = true;
+$file = $gpdf->generateWithStoreToS3($content,null,$fileName, true, $sslVerify);
+$fileUrl = $file['ObjectURL'];
+```
 
 ### [Demo Native PHP App](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo)
 please see this Demo Native PHP app contain more detailed examples and cases like pass dynamic parameters for html file & pass inline configs , .. and another cases.
