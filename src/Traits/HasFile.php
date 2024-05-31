@@ -6,10 +6,8 @@ trait HasFile
 {
     public function getRootPath()
     {
-        // TODO: update this before publish updates, change the level to 6 , depend on package path in vendor
         // get root app path, depend on package path in vendor
-        // $rootPath = dirname(__DIR__, 6);
-        return dirname(__DIR__, 3).'/Gpdf-Laravel-Demo/';
+        return dirname(__DIR__, 6);
     }
 
     public function getRealDirectoryPath($path)
