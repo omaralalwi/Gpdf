@@ -107,15 +107,18 @@ class PdfBuilder
         }
     }
 
-    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName)
+    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName, bool $withStream = false, bool $verifySsl=true)
     {
         try {
             $this->preparePdf($htmlContent);
             $pdfContent = $this->dompdf->output();
             $generatedFile = $this->storeFile($storageService, $pdfContent, $filePath, $fileName);
             $formattedGeneratedFile = $this->appendObjectURLToGeneratedFile($storageService, $generatedFile);
-            // TODO: make this optional
-            $storageService::streamFromUrl($formattedGeneratedFile['ObjectURL']);
+
+            if($withStream) {
+                $storageService->streamFromUrl($formattedGeneratedFile['ObjectURL'], $verifySsl);
+            }
+
             return $formattedGeneratedFile;
             // stream from url not available with local storage driver.
         } catch (\Exception $e) {
