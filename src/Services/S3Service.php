@@ -23,16 +23,11 @@ class S3Service
         try {
             $fullFilePath = $this->getFullFilePath($path, $fileName);
             $bucket = $this->s3Client->getBucket();
-            $result = $this->s3Client->initilizeClient()->putObject([
+            return $this->s3Client->initilizeClient()->putObject([
                 'Bucket' => $bucket,
                 'Key'    => $fullFilePath,
                 'Body'   => $pdfFile,
             ]);
-
-            $this->logUpload('s3 result $result', $result);
-
-//            return $result['ObjectURL'];
-            return $result;
         } catch (AwsException $e) {
             throw new \Exception('Error uploading PDF to S3: ' . $e->getMessage());
         }
@@ -67,7 +62,7 @@ class S3Service
      * @param string $fileUrl
      * @return bool
      */
-    public static function streamFromUrl(string $fileUrl): string
+    public static function streamFromUrl(string $fileUrl, bool $verifySsl=true): string
     {  // TODO: add way to check if file exists in S3
         self::setPdfHeaders($fileUrl);
         return readfile($fileUrl) !== false;
