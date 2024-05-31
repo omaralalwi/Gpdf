@@ -133,20 +133,6 @@ class PdfBuilder
         return $generatedFile;
     }
 
-    public function buildAndStoreToS3(string $htmlContent, string $filePath, string $fileName, $gpdfConfig)
-    {
-        try {
-            $s3Client = new S3Client($gpdfConfig);
-
-            $this->preparePdf($htmlContent);
-            $pdfContent = $this->dompdf->output();
-
-            return $this->storeFile($s3Client, $pdfContent, $filePath, $fileName);
-        } catch (\Exception $e) {
-            echo 'An error occurred while saving the PDF to S3: ' . $e->getMessage();
-        }
-    }
-
     /**
      * Prepare the PDF by formatting Arabic content, loading it into Dompdf, and rendering it.
      *
