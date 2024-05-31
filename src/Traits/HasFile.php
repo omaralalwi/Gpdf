@@ -7,7 +7,7 @@ trait HasFile
     public function getRootPath()
     {
         // get root app path, depend on package path in vendor
-        return dirname(__DIR__, 6);
+        return dirname(__DIR__, 5);
     }
 
     public function getRealDirectoryPath($path)
