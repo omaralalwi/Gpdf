@@ -57,6 +57,8 @@ return [
 
     GpdfSet::STORAGE_DRIVER => GpdfStorageDrivers::LOCAL, // local , s3
 
+    GpdfSet::STORAGE_PATH => GpdfDefault::STORAGE_PAT,
+
     GpdfSet::AWS_BUCKET => '',
 
     GpdfSet::AWS_REGION => '',
@@ -87,12 +89,6 @@ return [
      * @var string|null
      */
     GpdfSet::LOG_OUTPUT_FILE => GpdfDefault::LOG_OUTPUT_FILE,
-
-    /**
-     * Storage path for generated PDFs.
-     * @var string
-     */
-    GpdfSet::STORAGE_PATH => GpdfDefault::STORAGE_PAT,
 
     /**
      * Default media type for the generated PDFs.
