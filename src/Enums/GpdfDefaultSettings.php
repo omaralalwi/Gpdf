@@ -13,7 +13,7 @@ class GpdfDefaultSettings
     const ALLOWED_PROTOCOLS = ['http', 'https'];
     const ARTIFACT_PATH_VALIDATION = true;
     const LOG_OUTPUT_FILE = null;
-    const STORAGE_PAT = __DIR__ . '/../storage/pdfs/';
+    const STORAGE_PAT = '/public/downloads/pdfs/';
     const DEFAULT_MEDIA_TYPE = 'application/pdf';
     const DEFAULT_PAPER_SIZE = 'A4';
     const DEFAULT_PAPER_ORIENTATION = 'portrait';
