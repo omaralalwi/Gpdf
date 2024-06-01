@@ -233,6 +233,9 @@ same to store in local, just replace local path with bucket name, and replace `g
     }
 ```
 
+#### Generate Advance With Fixed Header
+please see [this example](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/0f041e7cf9030f48e2a35ce6d22e8fac5db98c48/app/Http/Controllers/GpdfController.php#L132C1-L133C1) if you need to add fixed header to all pages
+
 ### [Demo Laravel App](https://github.com/omaralalwi/Gpdf-Laravel-Demo)
 this Demo Laravel app contain more detailed examples and cases.
 
