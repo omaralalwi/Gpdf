@@ -1,35 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="4" assertions="5" errors="2" warnings="0" failures="0" skipped="0" time="0.011992">
-    <testsuite name="Gpdf Tests" tests="4" assertions="5" errors="2" warnings="0" failures="0" skipped="0" time="0.011992">
-      <testsuite name="Omaralalwi\Gpdf\Tests\GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" tests="4" assertions="5" errors="2" warnings="0" failures="0" skipped="0" time="0.011992">
-        <testcase name="testConfigFileExists" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="24" assertions="2" time="0.001145">
+  <testsuite name="" tests="4" assertions="8" errors="0" warnings="0" failures="0" skipped="0" time="0.091542">
+    <testsuite name="Gpdf Tests" tests="4" assertions="8" errors="0" warnings="0" failures="0" skipped="0" time="0.091542">
+      <testsuite name="Omaralalwi\Gpdf\Tests\GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" tests="4" assertions="8" errors="0" warnings="0" failures="0" skipped="0" time="0.091542">
+        <testcase name="testConfigFileExists" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="27" assertions="2" time="0.001856">
           <system-out>
 Config file exists : Yes
 Config file is available : Yes it is available
 </system-out>
         </testcase>
-        <testcase name="testConfigFileKeys" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="38" assertions="3" time="0.000184"/>
-        <testcase name="testCreatePdf" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="49" assertions="0" time="0.010406">
-          <error type="Error">Omaralalwi\Gpdf\Tests\GpdfTest::testCreatePdf
-Error: Call to undefined function Omaralalwi\Gpdf\Builders\config()
-
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Builders/PdfBuilder.php:151
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Builders/PdfBuilder.php:144
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Builders/PdfBuilder.php:85
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Gpdf.php:26
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php:53</error>
-        </testcase>
-        <testcase name="testArabicContent" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="58" assertions="0" time="0.000257">
-          <error type="Error">Omaralalwi\Gpdf\Tests\GpdfTest::testArabicContent
-Error: Call to undefined function Omaralalwi\Gpdf\Builders\config()
-
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Builders/PdfBuilder.php:151
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Builders/PdfBuilder.php:144
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Builders/PdfBuilder.php:85
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/src/Gpdf.php:26
-/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php:62</error>
-        </testcase>
+        <testcase name="testConfigFileKeys" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="41" assertions="3" time="0.000299"/>
+        <testcase name="testCreatePdf" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="52" assertions="1" time="0.062788"/>
+        <testcase name="testArabicContent" class="Omaralalwi\Gpdf\Tests\GpdfTest" classname="Omaralalwi.Gpdf.Tests.GpdfTest" file="/home/smahi/DATA-SSD/Sites/PHP/Laravel/lara-tryings/packages/Gpdf/tests/GpdfTest.php" line="61" assertions="2" time="0.026599"/>
       </testsuite>
     </testsuite>
   </testsuite>

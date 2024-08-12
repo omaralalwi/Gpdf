@@ -18,6 +18,9 @@ class GpdfTest extends TestCase
             GpdfSettingKeys::FONT_CACHE => realpath(__DIR__ . '/assets/fonts/'),
             GpdfSettingKeys::DEFAULT_FONT => GpdfDefaultSupportedFonts::DEJAVU_SANS,
             GpdfSettingKeys::IS_JAVASCRIPT_ENABLED => true,
+            GpdfSettingKeys::UTF8GLYPHS_MAX_CHARS => 50,
+            GpdfSettingKeys::UTF8GLYPHS_HINDO => true,
+            GpdfSettingKeys::UTF8GLYPHS_FORCERTL => false
         ]);
     }
 
