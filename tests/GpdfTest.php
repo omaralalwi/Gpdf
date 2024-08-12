@@ -2,6 +2,8 @@
 
 namespace Omaralalwi\Gpdf\Tests;
 
+use ArPHP\I18N\Arabic;
+use Omaralalwi\Gpdf\Builders\PdfBuilder;
 use Omaralalwi\Gpdf\Gpdf;
 use Omaralalwi\Gpdf\GpdfConfig;
 use PHPUnit\Framework\TestCase;
@@ -18,8 +20,8 @@ class GpdfTest extends TestCase
             GpdfSettingKeys::FONT_CACHE => realpath(__DIR__ . '/assets/fonts/'),
             GpdfSettingKeys::DEFAULT_FONT => GpdfDefaultSupportedFonts::DEJAVU_SANS,
             GpdfSettingKeys::IS_JAVASCRIPT_ENABLED => true,
-            GpdfSettingKeys::UTF8GLYPHS_MAX_CHARS => 50,
-            GpdfSettingKeys::UTF8GLYPHS_HINDO => true,
+            GpdfSettingKeys::UTF8GLYPHS_MAX_CHARS => 150,
+            GpdfSettingKeys::UTF8GLYPHS_HINDO => false,
             GpdfSettingKeys::UTF8GLYPHS_FORCERTL => false
         ]);
     }
@@ -68,4 +70,31 @@ class GpdfTest extends TestCase
         $this->assertStringContainsString('%PDF', $pdf, "PDF content does not contain valid PDF header");
     }
 
+    public function testUtf8GlyphsCalledWithSpecificParams()
+    {
+        $arabicMock = $this->createMock(Arabic::class);
+
+        $arabicMock->expects($this->once())
+                   ->method('utf8Glyphs')
+                   ->with(
+                       $this->equalTo('الجزائر 1234'),
+                       $this->equalTo(100),
+                       $this->equalTo(false),
+                       $this->equalTo(true)
+                   )
+                   ->willReturn('convertedText');
+
+        $pdfBuilder = $this->createPartialMock(PdfBuilder::class, ['formatArabic']);
+        
+        $pdfBuilder->expects($this->any())
+                   ->method('formatArabic')
+                   ->willReturnCallback(function($htmlContent) use ($arabicMock) {
+                       return $arabicMock->utf8Glyphs('الجزائر 1234', 100, false, true);
+                   });
+
+        $htmlContent = '<p>الجزائر 1234</p>';
+        $result = $pdfBuilder->formatArabic($htmlContent);
+
+        $this->assertEquals('convertedText', $result);
+    }
 }
