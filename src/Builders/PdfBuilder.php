@@ -2,14 +2,15 @@
 
 namespace Omaralalwi\Gpdf\Builders;
 
-use ArPHP\I18N\Arabic;
 use Dompdf\Dompdf;
+use ArPHP\I18N\Arabic;
 use Aws\Exception\AwsException;
-use Omaralalwi\Gpdf\Clients\S3Client;
-use Omaralalwi\Gpdf\Services\{S3Service, LocalFileService};
-use Omaralalwi\Gpdf\Enums\GpdfSettingKeys;
-use Omaralalwi\Gpdf\Traits\HasGpdfLog;
+use Omaralalwi\Gpdf\GpdfConfig;
 use Omaralalwi\Gpdf\Traits\HasFile;
+use Omaralalwi\Gpdf\Clients\S3Client;
+use Omaralalwi\Gpdf\Traits\HasGpdfLog;
+use Omaralalwi\Gpdf\Enums\GpdfSettingKeys;
+use Omaralalwi\Gpdf\Services\{S3Service, LocalFileService};
 
 class PdfBuilder
 {
@@ -107,7 +108,7 @@ class PdfBuilder
         }
     }
 
-    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName, bool $withStream = false, bool $verifySsl=true)
+    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName, bool $withStream = false, bool $verifySsl = true)
     {
         try {
             $this->preparePdf($htmlContent);
@@ -115,7 +116,7 @@ class PdfBuilder
             $generatedFile = $this->storeFile($storageService, $pdfContent, $filePath, $fileName);
             $formattedGeneratedFile = $this->appendObjectURLToGeneratedFile($storageService, $generatedFile);
 
-            if($withStream) {
+            if ($withStream) {
                 $storageService->streamFromUrl($formattedGeneratedFile['ObjectURL'], $verifySsl);
             }
 
@@ -148,12 +149,14 @@ class PdfBuilder
 
     public function formatArabic($htmlContent)
     {
+        $config = config('gpdf');  // added this line
+        $config = new GpdfConfig($config); // added this line
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
 
-        for ($i = count($p)-1; $i >= 0; $i-=2) {
-            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i-1], $p[$i] - $p[$i-1]));
-            $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
+        for ($i = count($p) - 1; $i >= 0; $i -= 2) {
+            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $config->get('utf8GlyphsMaxChars'), $config->get('utf8GlyphsHindo'), $config->get('utf8GlyphsForceRtl'));
+            $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
 
         return $this->convertEntities($htmlContent);
@@ -161,9 +164,9 @@ class PdfBuilder
 
     protected function convertEntities(string $subject): string
     {
-//        if (false === $this->config->get('convert_entities', true)) {
-//            return $subject;
-//        }
+        //        if (false === $this->config->get('convert_entities', true)) {
+        //            return $subject;
+        //        }
 
         $entities = [
             '€' => '&euro;',
@@ -188,10 +191,9 @@ class PdfBuilder
     protected function streamFromUrl(S3Service|LocalFileService $storageService, $fileUrl)
     {
         try {
-             return $storageService->streamFromUrl($fileUrl);
+            return $storageService->streamFromUrl($fileUrl);
         } catch (\Exception $e) {
             echo $e->getMessage() . "\n";
         }
     }
-
 }
