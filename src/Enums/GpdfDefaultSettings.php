@@ -37,4 +37,8 @@ class GpdfDefaultSettings
     const PDF_BACKEND = 'DPDF';
     const PDF_LIB_LICENSE = '';
     const HTTP_CONTEXT = null;
+
+    const UTF8GLYPHS_MAX_CHARS = 50;
+    const UTF8GLYPHS_HINDO = true;
+    const UTF8GLYPHS_FORCERTL = false;
 }
