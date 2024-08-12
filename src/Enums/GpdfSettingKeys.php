@@ -42,6 +42,10 @@ class GpdfSettingKeys
     const PDF_LIB_LICENSE = 'pdflibLicense';
     const HTTP_CONTEXT = 'httpContext';
 
+    const UTF8GLYPHS_MAX_CHARS = 'utf8GlyphsMaxChars';
+    const UTF8GLYPHS_HINDO = 'utf8GlyphsHindo';
+    const UTF8GLYPHS_FORCERTL = 'utf8GlyphsForceRtl';
+
     /*
      * output of the following function must be array like this
         'tempDir' => 'tempDir',
