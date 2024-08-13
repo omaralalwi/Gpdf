@@ -149,7 +149,7 @@ class PdfBuilder
 
     public function formatArabic($htmlContent)
     {
-        $config = new GpdfConfig();
+        $config = new GpdfConfig(config('gpdf'));
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
 
