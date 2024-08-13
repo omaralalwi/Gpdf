@@ -18,9 +18,12 @@ class PdfBuilder
 
     protected Dompdf $dompdf;
 
-    public function __construct(Dompdf $dompdf)
+    protected GpdfConfig $config;
+
+    public function __construct(Dompdf $dompdf, GpdfConfig $config)
     {
         $this->dompdf = $dompdf;
+        $this->config = $config;
     }
 
     /**
@@ -149,12 +152,11 @@ class PdfBuilder
 
     public function formatArabic($htmlContent)
     {
-        $config = new GpdfConfig(config('gpdf', []));
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
 
         for ($i = count($p) - 1; $i >= 0; $i -= 2) {
-            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $config->get('utf8GlyphsMaxChars'), $config->get('utf8GlyphsHindo'), $config->get('utf8GlyphsForceRtl'));
+            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $this->config->get('utf8GlyphsMaxChars'), $this->config->get('utf8GlyphsHindo'), $this->config->get('utf8GlyphsForceRtl'));
             $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
 
