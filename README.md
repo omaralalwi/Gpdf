@@ -331,7 +331,7 @@ If you discover any security-related issues, please email `omaralwi2010@gmail.co
 
 ## Credits
 
-- [Omar Alalwi](https://omaralalwi.info)
+- [Omar Alalwi](https://github.com/omaralalwi)
 
 ## License
 
