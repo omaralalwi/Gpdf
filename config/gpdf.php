@@ -1,11 +1,7 @@
 <?php
 
-use Omaralalwi\Gpdf\Enums\{
-    GpdfDefaultSettings as GpdfDefault,
-    GpdfSettingKeys as GpdfSet,
-    GpdfStorageDrivers,
-    GpdfDefaultSupportedFonts
-};
+use Omaralalwi\Gpdf\Enums\{GpdfDefaultSettings as GpdfDefault, GpdfSettingKeys as GpdfSet,
+    GpdfStorageDrivers, GpdfDefaultSupportedFonts};
 
 /**
  * Configuration file for the Gpdf package.
@@ -27,13 +23,13 @@ return [
      * Directory for storing font files.
      * @var string
      */
-    GpdfSet::FONT_DIR => realpath(__DIR__ . GpdfDefault::FONT_DIR),
+    GpdfSet::FONT_DIR => realpath(__DIR__.GpdfDefault::FONT_DIR),
 
     /**
      * Directory for storing font cache files.
      * @var string
      */
-    GpdfSet::FONT_CACHE =>  realpath(__DIR__ . GpdfDefault::FONT_DIR), // same to font dir to avoid cache problems
+    GpdfSet::FONT_CACHE =>  realpath(__DIR__.GpdfDefault::FONT_DIR), // same to font dir to avoid cache problems
 
     /**
      * Default font for generating PDFs.
@@ -226,8 +222,4 @@ return [
      * @var resource|null
      */
     GpdfSet::HTTP_CONTEXT => GpdfDefault::HTTP_CONTEXT,
-
-    GpdfSet::UTF8GLYPHS_MAX_CHARS => 50,
-    GpdfSet::UTF8GLYPHS_HINDO => true,
-    GpdfSet::UTF8GLYPHS_FORCERTL => false
 ];
