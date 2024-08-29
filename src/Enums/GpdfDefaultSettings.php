@@ -14,15 +14,15 @@ class GpdfDefaultSettings
     const ARTIFACT_PATH_VALIDATION = true;
     const LOG_OUTPUT_FILE = null;
     const STORAGE_PATH = '/public/downloads/pdfs/';
-    const DEFAULT_MEDIA_TYPE = 'application/pdf';
-    const DEFAULT_PAPER_SIZE = 'A4';
+    const DEFAULT_MEDIA_TYPE = 'screen';
+    const DEFAULT_PAPER_SIZE = 'letter';
     const DEFAULT_PAPER_ORIENTATION = 'portrait';
     const DEFAULT_FONT = 'tajawal';
-    const DPI = 150;
+    const DPI = 96;
     const FONT_HEIGHT_RATIO = 1.1;
     const IS_PHP_ENABLED = false;
     const IS_REMOTE_ENABLED = true;
-    const ALLOWED_REMOTE_HOSTS = ['example.com'];
+    const ALLOWED_REMOTE_HOSTS = [];
     const IS_JAVASCRIPT_ENABLED = false;
     const IS_HTML5_PARSER_ENABLED = false;
     const IS_FONT_SUB_SETTING_ENABLED = true;
@@ -34,7 +34,7 @@ class GpdfDefaultSettings
     const DEBUG_LAYOUT_BLOCKS = false;
     const DEBUG_LAYOUT_INLINE = false;
     const DEBUG_LAYOUT_PADDING_BOX = false;
-    const PDF_BACKEND = 'DPDF';
+    const PDF_BACKEND = 'CPDF';
     const PDF_LIB_LICENSE = '';
     const HTTP_CONTEXT = null;
 }
