@@ -38,6 +38,15 @@ return [
     GpdfSet::DEFAULT_FONT => GpdfDefaultSupportedFonts::TAJAWAL,
 
     /**
+     *
+     * Set this to `true` if you want numbers to appear in Hindi format (e.g., ١,٢,٣,٤,٥).
+     * Set to `false` to display numbers in standard format (e.g., 1, 2, 3, 4, 5).
+     *
+     * @var bool
+     */
+    GpdfSet::SHOW_NUMBERS_AS_HINDI => false,
+
+    /**
      * Font height ratio setting.
      * @var float
      */

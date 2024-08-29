@@ -10,16 +10,18 @@ use Omaralalwi\Gpdf\Services\{S3Service, LocalFileService};
 use Omaralalwi\Gpdf\Enums\GpdfSettingKeys;
 use Omaralalwi\Gpdf\Traits\HasGpdfLog;
 use Omaralalwi\Gpdf\Traits\HasFile;
+use Omaralalwi\Gpdf\GpdfConfig;
 
 class PdfBuilder
 {
     use HasGpdfLog, HasFile;
 
     protected Dompdf $dompdf;
-
-    public function __construct(Dompdf $dompdf)
+    protected GpdfConfig $gpdfConfig;
+    public function __construct(Dompdf $dompdf, GpdfConfig $gpdfConfig)
     {
         $this->dompdf = $dompdf;
+        $this->gpdfConfig = $gpdfConfig;
     }
 
     /**
@@ -156,7 +158,19 @@ class PdfBuilder
             $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
         }
 
+        if(!$this->gpdfConfig->get(GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI)) {
+            $htmlContent = $this->convertArabicNumbers($htmlContent);
+        }
+
         return $this->convertEntities($htmlContent);
+    }
+
+    private function convertArabicNumbers($text)
+    {
+        $easternArabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $standardArabicNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        return str_replace($easternArabicNumerals, $standardArabicNumerals, $text);
     }
 
     protected function convertEntities(string $subject): string

@@ -98,6 +98,6 @@ class Gpdf
     private function getPdfBuilder(): PdfBuilder
     {
         $dompdf = DompdfFactory::create($this->gpdfConfig);
-        return new PdfBuilder($dompdf);
+        return new PdfBuilder($dompdf, $this->gpdfConfig);
     }
 }
