@@ -20,9 +20,7 @@ class GpdfTest extends TestCase
             GpdfSettingKeys::FONT_CACHE => realpath(__DIR__ . '/assets/fonts/'),
             GpdfSettingKeys::DEFAULT_FONT => GpdfDefaultSupportedFonts::DEJAVU_SANS,
             GpdfSettingKeys::IS_JAVASCRIPT_ENABLED => true,
-            GpdfSettingKeys::UTF8GLYPHS_MAX_CHARS => 150,
-            GpdfSettingKeys::UTF8GLYPHS_HINDO => false,
-            GpdfSettingKeys::UTF8GLYPHS_FORCERTL => false
+            GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI => false,
         ]);
     }
 
