@@ -157,7 +157,7 @@ class PdfBuilder
 
         for ($i = count($p) - 1; $i >= 0; $i -= 2) {
             $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $max_chars);
-            $utf8ar = nl2br($utf8ar);
+            //$utf8ar = nl2br($utf8ar);
 
             $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
