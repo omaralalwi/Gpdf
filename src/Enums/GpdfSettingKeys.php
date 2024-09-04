@@ -8,6 +8,7 @@ class GpdfSettingKeys
     const FONT_DIR = 'fontDir';
     const FONT_CACHE = 'fontCache';
     const SHOW_NUMBERS_AS_HINDI = 'showNumbersAsHindi';
+    const MAX_CHARS_PER_LINE = 'maxCharsPerLine';
     const CHROOT = 'chroot';
     const STORAGE_PATH = 'storage_path';
     const AWS_BUCKET = 'aws_storage_bucket';
@@ -71,5 +72,4 @@ class GpdfSettingKeys
         }
         return $keysObject;
     }
-
 }

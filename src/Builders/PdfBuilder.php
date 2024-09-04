@@ -109,7 +109,7 @@ class PdfBuilder
         }
     }
 
-    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName, bool $withStream = false, bool $verifySsl=true)
+    public function buildAndStore(S3Service|LocalFileService $storageService, string $htmlContent, string $filePath, string $fileName, bool $withStream = false, bool $verifySsl = true)
     {
         try {
             $this->preparePdf($htmlContent);
@@ -117,7 +117,7 @@ class PdfBuilder
             $generatedFile = $this->storeFile($storageService, $pdfContent, $filePath, $fileName);
             $formattedGeneratedFile = $this->appendObjectURLToGeneratedFile($storageService, $generatedFile);
 
-            if($withStream) {
+            if ($withStream) {
                 $storageService->streamFromUrl($formattedGeneratedFile['ObjectURL'], $verifySsl);
             }
 
@@ -153,12 +153,14 @@ class PdfBuilder
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
 
-        for ($i = count($p)-1; $i >= 0; $i-=2) {
-            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i-1], $p[$i] - $p[$i-1]));
-            $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
+        $max_chars = $this->gpdfConfig->get(GpdfSettingKeys::MAX_CHARS_PER_LINE);
+
+        for ($i = count($p) - 1; $i >= 0; $i -= 2) {
+            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $max_chars);
+            $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
 
-        if(!$this->gpdfConfig->get(GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI)) {
+        if (!$this->gpdfConfig->get(GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI)) {
             $htmlContent = $this->convertArabicNumbers($htmlContent);
         }
 
@@ -175,9 +177,9 @@ class PdfBuilder
 
     protected function convertEntities(string $subject): string
     {
-//        if (false === $this->config->get('convert_entities', true)) {
-//            return $subject;
-//        }
+        //        if (false === $this->config->get('convert_entities', true)) {
+        //            return $subject;
+        //        }
 
         $entities = [
             '€' => '&euro;',
@@ -202,10 +204,9 @@ class PdfBuilder
     protected function streamFromUrl(S3Service|LocalFileService $storageService, $fileUrl)
     {
         try {
-             return $storageService->streamFromUrl($fileUrl);
+            return $storageService->streamFromUrl($fileUrl);
         } catch (\Exception $e) {
             echo $e->getMessage() . "\n";
         }
     }
-
 }
