@@ -1,7 +1,11 @@
 <?php
 
-use Omaralalwi\Gpdf\Enums\{GpdfDefaultSettings as GpdfDefault, GpdfSettingKeys as GpdfSet,
-    GpdfStorageDrivers, GpdfDefaultSupportedFonts};
+use Omaralalwi\Gpdf\Enums\{
+    GpdfDefaultSettings as GpdfDefault,
+    GpdfSettingKeys as GpdfSet,
+    GpdfStorageDrivers,
+    GpdfDefaultSupportedFonts
+};
 
 /**
  * Configuration file for the Gpdf package.
@@ -23,13 +27,13 @@ return [
      * Directory for storing font files.
      * @var string
      */
-    GpdfSet::FONT_DIR => realpath(__DIR__.GpdfDefault::FONT_DIR),
+    GpdfSet::FONT_DIR => realpath(__DIR__ . GpdfDefault::FONT_DIR),
 
     /**
      * Directory for storing font cache files.
      * @var string
      */
-    GpdfSet::FONT_CACHE =>  realpath(__DIR__.GpdfDefault::FONT_DIR), // same to font dir to avoid cache problems
+    GpdfSet::FONT_CACHE =>  realpath(__DIR__ . GpdfDefault::FONT_DIR), // same to font dir to avoid cache problems
 
     /**
      * Default font for generating PDFs.
@@ -45,6 +49,14 @@ return [
      * @var bool
      */
     GpdfSet::SHOW_NUMBERS_AS_HINDI => false,
+
+    /**
+     *
+     * Set Max number of chars you can fit in one line, default is 50
+     *
+     * @var integer
+     */
+    GpdfSet::MAX_CHARS_PER_LINE => 50,
 
     /**
      * Font height ratio setting.
