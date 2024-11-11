@@ -56,7 +56,7 @@ return [
      *
      * @var integer
      */
-    GpdfSet::MAX_CHARS_PER_LINE => 50,
+    GpdfSet::MAX_CHARS_PER_LINE => 100,
 
     /**
      * Font height ratio setting.
