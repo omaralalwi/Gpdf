@@ -8,6 +8,38 @@
 
 Open Source PHP Package for converting HTML to PDF in PHP & Laravel applications, support store to s3,  with out-of-the-box support for Arabic content and other languages. Extends [dompdf](https://github.com/dompdf/dompdf) to add new features and solve issues like Arabic language support.
 
+---
+
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Publish Resources](#publish-resources)
+- [Usage with Native PHP Apps](#usage-with-native-php-apps)
+    - [Basic Usage](#basic-usage)
+    - [Stream Generated PDF Files](#stream-generated-pdf-files)
+    - [Store Files to Local](#store-files-to-local)
+    - [Store Files to S3](#store-files-to-s3)
+- [Usage with Laravel](#usage-with-laravel)
+    - [Using the Gpdf Facade](#using-the-gpdf-facade)
+    - [Using Dependency Injection](#using-dependency-injection)
+    - [Stream Generated PDF Files](#stream-generated-pdf-files-1)
+    - [Storing Generated PDF Files](#storing-generated-pdf-files)
+- [Supported Fonts](#supported-fonts)
+    - [Support for Arabic](#support-for-arabic)
+    - [Installing New Fonts](#installing-new-fonts)
+- [Install Custom Fonts](#installing-custom-fonts)
+- [Features](#features)
+- [Thanks](#thanks)
+- [Testing](#testing)
+- [Changelog](#changelog)
+- [Contributors](#contributors-)
+- [Security](#security)
+- [Credits](#credits)
+- [License](#license)
+
+---
+
 ## Requirements
 
 - PHP version 8.1 or higher
@@ -264,9 +296,9 @@ We Recommended to Use font name from `Omaralalwi\Gpdf\Enums\GpdfDefaultSupported
 
 ---
 
-## Installing New Fonts
+## Installing Custom Fonts
 
-To install a new font, follow these steps:
+To install custom font, follow these steps:
 
 1. Ensure the default fonts are published to `public/vendor/gpdf/fonts`.
 2. Prepare at least one font (Normal) for each family `(Normal, Bold, Italic, BoldItalic)`.
@@ -321,9 +353,36 @@ php run-tests.php
 
 See [CHANGELOG](CHANGELOG.md) for recent changes.
 
-## Contributing
+## Contributors ✨
 
-See [CONTRIBUTING](CONTRIBUTING.md) for details.
+Thanks to these wonderful people for contributing to this project! 💖
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/omaralalwi">
+        <img src="https://avatars.githubusercontent.com/u/25439498?v=4" width="100px;" alt="Omar Al Alwi"/>
+        <br />
+        <sub><b>Omar Al Alwi</b></sub>
+      </a>
+      <br />
+      🏆 Owner
+    </td>
+    <!-- Contributors -->
+    <td align="center">
+      <a href="https://github.com/smahi">
+        <img src="https://avatars.githubusercontent.com/u/1782133?v=4" width="100px;" alt="Contributor Name"/>
+        <br />
+        <sub><b>Abesse Smahi</b></sub>
+      </a>
+      <br />
+      💻 Contributor
+    </td>
+  </tr>
+</table>
+
+Want to contribute? Check out the [contributing guidelines](./CONTRIBUTING.md) and submit a pull request! 🚀
+
 
 ## Security
 
