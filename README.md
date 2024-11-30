@@ -15,16 +15,16 @@ Open Source PHP Package for converting HTML to PDF in PHP & Laravel applications
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Publish Resources](#publish-resources)
-- [Usage with Native PHP Apps](#usage-with-native-php-apps)
-  - [Basic Usage](#basic-usage)
-  - [Stream Generated PDF Files](#stream-generated-pdf-files)
-  - [Store Files to Local](#store-files-to-local)
-  - [Store Files to S3](#store-files-to-s3)
 - [Usage with Laravel](#usage-with-laravel)
   - [Using the Gpdf Facade](#using-the-gpdf-facade)
   - [Using Dependency Injection](#using-dependency-injection)
   - [Stream Generated PDF Files](#stream-generated-pdf-files-1)
   - [Storing Generated PDF Files](#storing-generated-pdf-files)
+- [Usage with Native PHP Apps](#usage-with-native-php-apps)
+  - [Basic Usage](#basic-usage)
+  - [Stream Generated PDF Files](#stream-generated-pdf-files)
+  - [Store Files to Local](#store-files-to-local)
+  - [Store Files to S3](#store-files-to-s3)
 - [Supported Fonts](#supported-fonts)
   - [Support for Arabic](#support-for-arabic)
   - [Installing New Fonts](#installing-new-fonts)
@@ -67,6 +67,95 @@ php vendor/omaralalwi/gpdf/scripts/publish_config.php
 **Note for Publish Issues:** If you encounter any issues while publishing, manually copy the `vendor/omaralalwi/gpdf/assets/fonts` folder to `public/vendor/gpdf` and ensure the fonts are in `public/vendor/gpdf/fonts`. Also, copy `vendor/omaralalwi/gpdf/config/gpdf.php` to the `/config` folder in the root path.
 
 ---
+
+## Usage with Laravel
+
+### Using the Gpdf Facade
+
+```php
+use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
+
+public function generatePdf()
+{
+    $html = view('pdf.example-1')->render();
+    $pdfContent = GpdfFacade::generate($html);
+    return response($pdfContent, 200, ['Content-Type' => 'application/pdf']);
+}
+```
+
+### Using Dependency Injection
+
+```php
+use Omaralalwi\Gpdf\Gpdf;
+
+public function generateSecondWayPdf(Gpdf $gpdf)
+{
+    $html = view('pdf.example-2')->render();
+    $pdfFile = $gpdf->generate($html);
+    return response($pdfFile, 200, ['Content-Type' => 'application/pdf']);
+}
+```
+
+### Stream Generated PDF Files
+
+Stream a PDF directly to the browser using `generateWithStream`:
+
+```php
+// by default it store files to local driver (path should in public path).
+public function generateAndStream()
+{
+    $html = view('pdf.example-2')->render();
+    $gpdf = app(Gpdf::class);
+    $gpdf->generateWithStream($html, 'test-streamed-pdf', true);
+    return response(null, 200, ['Content-Type' => 'application/pdf']);
+}
+```
+
+### Storing Generated PDF Files
+
+#### Store Files To local
+
+Save a PDF to storage using `generateWithStore`:
+
+**Note** By default it store files to local driver (ensure that: the store path is access able for read and write).
+
+please see [generateWithStore params](#generateWithStore-params) .
+```php
+public function generateAndStore()
+{
+    $html = view('pdf.example-2')->render();
+    $gpdf = app(Gpdf::class);
+    $storePath = storage_path('app/downloads/users/');
+    $gpdf->generateWithStore($html, $storePath, 'test-stored-pdf-file', true, false); // ssl verify should be true in production .
+    return $file['ObjectURL']; // return file url as string , to store in db or do any action
+}
+// may be you will face problems with stream in local, so you can disable ssl verify in local, but should enable it in production.
+```
+
+#### Store Files To S3
+same to store in local, just replace local path with bucket name, and replace `generateWithStore` with `generateWithStoreToS3` .
+
+**Note** Ensure you setup s3 configs in config file.
+```php
+    public function generateAndStoreToS3()
+    {
+        $data = $this->getDynamicParams();
+        $html = view('pdf.example-2',$data)->render();
+        $gpdf = app(Gpdf::class);
+        $bucketName = 'your_s3_bucket_name'; // should be read abel and write able .
+        $file = $gpdf->generateWithStoreToS3($html, $bucketName, 'test-store-pdf-fle', true, true); // with s36 the ssl verify will work in local or production (always secure).
+        return $file['ObjectURL']; // return file url as string , to store in db or do any action
+    }
+```
+
+#### Generate Advance With Fixed Header
+please see [this example](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/0f041e7cf9030f48e2a35ce6d22e8fac5db98c48/app/Http/Controllers/GpdfController.php#L132C1-L133C1) if you need to add fixed header to all pages
+
+### [Demo Laravel App](https://github.com/omaralalwi/Gpdf-Laravel-Demo)
+this Demo Laravel app contain more detailed examples and cases.
+
+---
+
 
 ## Usage with Native PHP Apps
 
@@ -182,94 +271,6 @@ $fileUrl = $file['ObjectURL'];
 
 ### [Demo Native PHP App](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo)
 please see this Demo Native PHP app contain more detailed examples and cases like pass dynamic parameters for html file & pass inline configs , .. and another cases.
-
----
-
-## Usage with Laravel
-
-### Using the Gpdf Facade
-
-```php
-use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
-
-public function generatePdf()
-{
-    $html = view('pdf.example-1')->render();
-    $pdfContent = GpdfFacade::generate($html);
-    return response($pdfContent, 200, ['Content-Type' => 'application/pdf']);
-}
-```
-
-### Using Dependency Injection
-
-```php
-use Omaralalwi\Gpdf\Gpdf;
-
-public function generateSecondWayPdf(Gpdf $gpdf)
-{
-    $html = view('pdf.example-2')->render();
-    $pdfFile = $gpdf->generate($html);
-    return response($pdfFile, 200, ['Content-Type' => 'application/pdf']);
-}
-```
-
-### Stream Generated PDF Files
-
-Stream a PDF directly to the browser using `generateWithStream`:
-
-```php
-// by default it store files to local driver (path should in public path).
-public function generateAndStream()
-{
-    $html = view('pdf.example-2')->render();
-    $gpdf = app(Gpdf::class);
-    $gpdf->generateWithStream($html, 'test-streamed-pdf', true);
-    return response(null, 200, ['Content-Type' => 'application/pdf']);
-}
-```
-
-### Storing Generated PDF Files
-
-#### Store Files To local
-
-Save a PDF to storage using `generateWithStore`:
-
-**Note** By default it store files to local driver (ensure that: the store path is access able for read and write).
-
-please see [generateWithStore params](#generateWithStore-params) .
-```php
-public function generateAndStore()
-{
-    $html = view('pdf.example-2')->render();
-    $gpdf = app(Gpdf::class);
-    $storePath = storage_path('app/downloads/users/');
-    $gpdf->generateWithStore($html, $storePath, 'test-stored-pdf-file', true, false); // ssl verify should be true in production .
-    return $file['ObjectURL']; // return file url as string , to store in db or do any action
-}
-// may be you will face problems with stream in local, so you can disable ssl verify in local, but should enable it in production.
-```
-
-#### Store Files To S3
-same to store in local, just replace local path with bucket name, and replace `generateWithStore` with `generateWithStoreToS3` .
-
-**Note** Ensure you setup s3 configs in config file.
-```php
-    public function generateAndStoreToS3()
-    {
-        $data = $this->getDynamicParams();
-        $html = view('pdf.example-2',$data)->render();
-        $gpdf = app(Gpdf::class);
-        $bucketName = 'your_s3_bucket_name'; // should be read abel and write able .
-        $file = $gpdf->generateWithStoreToS3($html, $bucketName, 'test-store-pdf-fle', true, true); // with s36 the ssl verify will work in local or production (always secure).
-        return $file['ObjectURL']; // return file url as string , to store in db or do any action
-    }
-```
-
-#### Generate Advance With Fixed Header
-please see [this example](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/0f041e7cf9030f48e2a35ce6d22e8fac5db98c48/app/Http/Controllers/GpdfController.php#L132C1-L133C1) if you need to add fixed header to all pages
-
-### [Demo Laravel App](https://github.com/omaralalwi/Gpdf-Laravel-Demo)
-this Demo Laravel app contain more detailed examples and cases.
 
 ---
 
