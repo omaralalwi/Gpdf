@@ -1,12 +1,22 @@
+# **GPDF** : Multilingual & Arabic PDF Generator for PHP/Laravel Applications
+
+[![Latest Version](https://img.shields.io/packagist/v/omaralalwi/gpdf)](https://packagist.org/packages/omaralalwi/gpdf)
+[![Total Downloads](https://img.shields.io/packagist/dt/omaralalwi/gpdf)](https://packagist.org/packages/omaralalwi/gpdf)
+[![GitHub Stars](https://img.shields.io/github/stars/omaralalwi/Gpdf)](https://github.com/omaralalwi/Gpdf/stargazers)
+[![PHP Version](https://img.shields.io/packagist/php-v/omaralalwi/gpdf)](https://php.net)
+[![License](https://img.shields.io/github/license/omaralalwi/Gpdf)](https://opensource.org/licenses/MIT)
+
+<meta property="og:title" content="GPDF: Arabic PDF Generator for PHP/Laravel">
+<meta property="og:description" content="Generate RTL/Arabic PDFs with built-in fonts and S3 storage support.">
+<meta property="og:image" content="https://github.com/omaralalwi/Gpdf/raw/main/gpdf-demo.png">
+
 <p align="center">
-  <a href="https://omaralalwi.github.io/Gpdf" target="_blank">
-    <img src="https://raw.githubusercontent.com/omaralalwi/Gpdf/master/public/images/gpdf-banner-bg.jpg" alt="Gpdf">
+  <a href="https://github.com/omaralalwi/Gpdf">
+    <img src="https://raw.githubusercontent.com/omaralalwi/Gpdf/master/public/images/gpdf-banner-bg.jpg" alt="GPDF: Arabic PDF Generator with S3 Storage">
   </a>
 </p>
 
-# [Gpdf](https://github.com/omaralalwi/Gpdf) : HTML to PDF Converter for PHP & Laravel
-
-Open Source PHP Package for converting HTML to PDF in PHP & Laravel applications, support store to s3,  with out-of-the-box support for Arabic content and other languages. Extends [dompdf](https://github.com/dompdf/dompdf) to add new features and solve issues like Arabic language support.
+**GPDF** is a PHP/Laravel package for generating **Arabic, RTL, and multilingual PDFs** with native support for 17 built-in Arabic fonts, S3 cloud storage, and enterprise-ready features. Built as a DomPDF extension, it solves Arabic rendering issues while adding modern capabilities for documents, invoices, and reports.
 
 ---
 
