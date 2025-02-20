@@ -1,6 +1,7 @@
-# GPDF: Multilingual & Arabic PDF Generator for PHP/Laravel Applications
+# جي بي دي اف : مولد ملفات بي دي اف لتطبيقات بي اتش بي و لارافيل يدعم جميع اللغات واللغة العربية بشكل كامل
 
-[![Latest Version](https://img.shields.io/packagist/v/omaralalwi/gpdf?style=for-the-badge)](https://packagist.org/packages/omaralalwi/gpdf)
+
+[![GitHub Release](https://img.shields.io/github/v/release/omaralalwi/Gpdf?style=for-the-badge&include_prereleases)](https://github.com/omaralalwi/Gpdf/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/omaralalwi/gpdf?style=for-the-badge)](https://packagist.org/packages/omaralalwi/gpdf)
 [![GitHub Stars](https://img.shields.io/github/stars/omaralalwi/Gpdf?style=for-the-badge)](https://github.com/omaralalwi/Gpdf/stargazers)
 [![PHP Version](https://img.shields.io/packagist/php-v/omaralalwi/gpdf?style=for-the-badge)](https://php.net)
@@ -9,61 +10,61 @@
 
 <p align="center">
   <a href="https://github.com/omaralalwi/Gpdf">
-    <img src="https://raw.githubusercontent.com/omaralalwi/Gpdf/master/public/images/gpdf-banner-bg.jpg" alt="GPDF: Arabic PDF Generator with S3 Storage | PHP/Laravel Package">
+    <img src="https://raw.githubusercontent.com/omaralalwi/Gpdf/master/public/images/gpdf-banner-bg.jpg" alt="GPDF: مولد PDF بالعربي مع تخزين S3 | حزمة PHP/Laravel">
   </a>
 </p>
 
-**GPDF** is a PHP/Laravel package for generating **Arabic, RTL, and multilingual PDFs** with native support for 17 built-in Arabic fonts, S3 cloud storage, and enterprise-ready features. Built as a DomPDF extension, it solves Arabic rendering issues while adding modern capabilities for documents, invoices, and reports.
+**GPDF** هي حزمة PHP/Laravel لإنشاء **ملفات PDF متعددة اللغات مع دعم اللغة العربية والكتابة من اليمين إلى اليسار (RTL)**. تتضمن الحزمة دعمًا أصليًا لـ 17 خط عربي، وتخزين سحابي على S3، وميزات متقدمة تناسب احتياجات المؤسسات. تم تصميمها كامتداد لـ DomPDF لحل مشاكل عرض اللغة العربية مع إضافة إمكانيات حديثة لإنشاء الوثائق والفواتير والتقارير.
 
 ---
 
-## Table of Contents
+## الفهرس
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Publish Resources](#publish-resources)
-- [Usage with Laravel](#usage-with-laravel)
-  - [Using the Gpdf Facade](#using-the-gpdf-facade)
-  - [Using Dependency Injection](#using-dependency-injection)
-  - [Stream Generated PDF Files](#stream-generated-pdf-files-1)
-  - [Storing Generated PDF Files](#storing-generated-pdf-files)
-- [Usage with Native PHP Apps](#usage-with-native-php-apps)
-  - [Basic Usage](#basic-usage)
-  - [Stream Generated PDF Files](#stream-generated-pdf-files)
-  - [Store Files to Local](#store-files-to-local)
-  - [Store Files to S3](#store-files-to-s3)
-- [Supported Fonts](#supported-fonts)
-  - [Support for Arabic](#support-for-arabic)
-  - [Installing New Fonts](#installing-new-fonts)
-- [Install Custom Fonts](#installing-custom-fonts)
-- [Features](#features)
-- [Thanks](#thanks)
-- [Testing](#testing)
-- [Changelog](#changelog)
-- [Contributors](#contributors-)
-- [Security](#security)
-- [Credits](#credits)
-- [License](#license)
+- [المتطلبات](#المتطلبات)
+- [التثبيت](#التثبيت)
+- [نشر الموارد](#نشر-الموارد)
+- [الاستخدام مع Laravel](#الاستخدام-مع-laravel)
+  - [استخدام Facade الخاص بـ Gpdf](#استخدام-facade-الخاص-بـ-gpdf)
+  - [استخدام الحقن الاعتمادي](#استخدام-الحقن-الاعتمادي)
+  - [عرض ملفات PDF مباشرة](#عرض-ملفات-pdf-مباشرة)
+  - [تخزين ملفات PDF](#تخزين-ملفات-pdf)
+- [الاستخدام مع تطبيقات PHP التقليدية](#الاستخدام-مع-تطبيقات-php-التقليدية)
+  - [الاستخدام الأساسي](#الاستخدام-الأساسي)
+  - [عرض ملفات PDF مباشرة](#عرض-ملفات-pdf-مباشرة-1)
+  - [تخزين الملفات محلياً](#تخزين-الملفات-محلياً)
+  - [تخزين الملفات على S3](#تخزين-الملفات-على-s3)
+- [الخطوط المدعومة](#الخطوط-المدعومة)
+  - [الدعم للغة العربية](#الدعم-للغة-العربية)
+  - [تثبيت خطوط جديدة](#تثبيت-خطوط-جديدة)
+- [تثبيت الخطوط المخصصة](#تثبيت-الخطوط-المخصصة)
+- [الميزات](#الميزات)
+- [الشكر](#الشكر)
+- [الاختبارات](#الاختبارات)
+- [سجل التغييرات](#سجل-التغييرات)
+- [المساهمون](#المساهمون)
+- [الأمان](#الأمان)
+- [الاعتمادات](#الاعتمادات)
+- [الترخيص](#الترخيص)
 
 ---
 
-## Requirements
+## المتطلبات
 
-- PHP version 8.1 or higher
-- DOM extension
-- MBString extension
+- إصدار PHP 8.1 أو أعلى
+- امتداد DOM
+- امتداد MBString
 - php-font-lib
 - php-svg-lib
 
-## Installation
+## التثبيت
 
 ```bash
 composer require omaralalwi/gpdf
 ```
 
-## Publish Resources
+## نشر الموارد
 
-After installation, publish the config and fonts resources by running the following commands in the root project path:
+بعد التثبيت، قم بنشر ملفات الإعدادات والخطوط بتنفيذ الأوامر التالية في جذر المشروع:
 
 ```bash
 php vendor/omaralalwi/gpdf/scripts/publish_fonts.php
@@ -71,13 +72,13 @@ php vendor/omaralalwi/gpdf/scripts/publish_fonts.php
 php vendor/omaralalwi/gpdf/scripts/publish_config.php
 ```
 
-**Note for Publish Issues:** If you encounter any issues while publishing, manually copy the `vendor/omaralalwi/gpdf/assets/fonts` folder to `public/vendor/gpdf` and ensure the fonts are in `public/vendor/gpdf/fonts`. Also, copy `vendor/omaralalwi/gpdf/config/gpdf.php` to the `/config` folder in the root path.
+**ملاحظة بخصوص مشاكل النشر:** إذا واجهت أي مشاكل أثناء النشر، انسخ يدويًا مجلد `vendor/omaralalwi/gpdf/assets/fonts` إلى `public/vendor/gpdf` وتأكد من وجود الخطوط في `public/vendor/gpdf/fonts`. كما يجب نسخ `vendor/omaralalwi/gpdf/config/gpdf.php` إلى مجلد `/config` في جذر المشروع.
 
 ---
 
-## Usage with Laravel
+## الاستخدام مع Laravel
 
-### Using the Gpdf Facade
+### استخدام Facade الخاص بـ Gpdf
 
 ```php
 use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
@@ -90,7 +91,7 @@ public function generatePdf()
 }
 ```
 
-### Using Dependency Injection
+### استخدام الحقن الاعتمادي
 
 ```php
 use Omaralalwi\Gpdf\Gpdf;
@@ -103,12 +104,12 @@ public function generateSecondWayPdf(Gpdf $gpdf)
 }
 ```
 
-### Stream Generated PDF Files
+### عرض ملفات PDF مباشرة
 
-Stream a PDF directly to the browser using `generateWithStream`:
+لعرض ملف PDF مباشرة في المتصفح باستخدام `generateWithStream`:
 
 ```php
-// by default it store files to local driver (path should in public path).
+// بشكل افتراضي، يتم تخزين الملفات محلياً (يجب أن يكون المسار ضمن public).
 public function generateAndStream()
 {
     $html = view('pdf.example-2')->render();
@@ -118,57 +119,58 @@ public function generateAndStream()
 }
 ```
 
-### Storing Generated PDF Files
+### تخزين ملفات PDF
 
-#### Store Files To local
+#### تخزين الملفات محلياً
 
-Save a PDF to storage using `generateWithStore`:
+لحفظ ملف PDF على التخزين باستخدام `generateWithStore`:
 
-**Note** By default it store files to local driver (ensure that: the store path is access able for read and write).
+**ملاحظة:** بشكل افتراضي، يتم تخزين الملفات محلياً (تأكد من أن مسار التخزين متاح للقراءة والكتابة).
 
-please see [generateWithStore params](#generateWithStore-params) .
+يرجى مراجعة [معايير generateWithStore](#generatewithstore-params).
 ```php
 public function generateAndStore()
 {
     $html = view('pdf.example-2')->render();
     $gpdf = app(Gpdf::class);
     $storePath = storage_path('app/downloads/users/');
-    $gpdf->generateWithStore($html, $storePath, 'test-stored-pdf-file', true, false); // ssl verify should be true in production .
-    return $file['ObjectURL']; // return file url as string , to store in db or do any action
+    $gpdf->generateWithStore($html, $storePath, 'test-stored-pdf-file', true, false); // يجب تفعيل sslVerify في بيئة الإنتاج.
+    return $file['ObjectURL']; // يعيد عنوان URL للملف كسلسلة نصية لتخزينه أو استخدامه.
 }
-// may be you will face problems with stream in local, so you can disable ssl verify in local, but should enable it in production.
+// قد تواجه مشاكل مع stream في البيئة المحلية، لذا يمكنك تعطيل sslVerify محليًا، مع ضرورة تفعيله في الإنتاج.
 ```
 
-#### Store Files To S3
-same to store in local, just replace local path with bucket name, and replace `generateWithStore` with `generateWithStoreToS3` .
+#### تخزين الملفات على S3
 
-**Note** Ensure you setup s3 configs in config file.
+بنفس طريقة التخزين المحلي، فقط استبدل مسار التخزين المحلي باسم الدلو (bucket name)، واستبدل `generateWithStore` بـ `generateWithStoreToS3`.
+
+**ملاحظة:** تأكد من إعداد تكوينات S3 في ملف الإعدادات.
 ```php
-    public function generateAndStoreToS3()
-    {
-        $data = $this->getDynamicParams();
-        $html = view('pdf.example-2',$data)->render();
-        $gpdf = app(Gpdf::class);
-        $bucketName = 'your_s3_bucket_name'; // should be read abel and write able .
-        $file = $gpdf->generateWithStoreToS3($html, $bucketName, 'test-store-pdf-fle', true, true); // with s36 the ssl verify will work in local or production (always secure).
-        return $file['ObjectURL']; // return file url as string , to store in db or do any action
-    }
+public function generateAndStoreToS3()
+{
+    $data = $this->getDynamicParams();
+    $html = view('pdf.example-2', $data)->render();
+    $gpdf = app(Gpdf::class);
+    $bucketName = 'your_s3_bucket_name'; // يجب أن يكون الدلو قابلًا للقراءة والكتابة.
+    $file = $gpdf->generateWithStoreToS3($html, $bucketName, 'test-store-pdf-file', true, true); // مع S3 يتم تفعيل sslVerify دائمًا للأمان.
+    return $file['ObjectURL']; // يعيد عنوان URL للملف كسلسلة نصية.
+}
 ```
 
-#### Generate Advance With Fixed Header
-please see [this example](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/0f041e7cf9030f48e2a35ce6d22e8fac5db98c48/app/Http/Controllers/GpdfController.php#L132C1-L133C1) if you need to add fixed header to all pages
+#### مثال لتوليد PDF مع رأس ثابت
 
-### [Demo Laravel App](https://github.com/omaralalwi/Gpdf-Laravel-Demo)
-this Demo Laravel app contain more detailed examples and cases.
+يرجى مراجعة [هذا المثال](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/0f041e7cf9030f48e2a35ce6d22e8fac5db98c48/app/Http/Controllers/GpdfController.php#L132C1-L133C1) إذا كنت بحاجة لإضافة رأس ثابت لجميع الصفحات.
+
+### [تطبيق Laravel توضيحي](https://github.com/omaralalwi/Gpdf-Laravel-Demo)
+يحتوي هذا التطبيق التوضيحي على أمثلة وحالات استخدام مفصلة.
 
 ---
 
+## الاستخدام مع تطبيقات PHP التقليدية
 
-## Usage with Native PHP Apps
+بعد تثبيت الحزمة ونشر الموارد، قم بتضمين `autoload.php` واستخدم فئة `Gpdf`.
 
-After installing the package and publishing resources, include `autoload.php` and use the `Gpdf` class.
-
-### Basic Usage
+### الاستخدام الأساسي
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
@@ -188,11 +190,11 @@ header('Content-Type: application/pdf');
 echo $pdfContent;
 ```
 
-**Note:** Customize the settings file as needed.
+**ملاحظة:** قم بتخصيص ملف الإعدادات حسب الحاجة.
 
-### Stream Generated PDF Files
+### عرض ملفات PDF مباشرة
 
-Stream a PDF directly to the browser using `generateWithStream`:
+لعرض ملف PDF مباشرة باستخدام `generateWithStream`:
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
@@ -213,12 +215,11 @@ header('Content-Type: application/pdf');
 echo $pdfContent;
 ```
 
-#### Store Files To Local
+#### تخزين الملفات محلياً
 
-Save a PDF files to local storage using `generateWithStore`:
+لحفظ ملفات PDF على التخزين المحلي باستخدام `generateWithStore`:
 
-**Note** By default it store files to local driver.
-
+**ملاحظة:** يتم تخزين الملفات محلياً بشكل افتراضي.
 ```php
 <?php
 
@@ -236,23 +237,25 @@ $config = new GpdfConfig($gpdfConfigFile);
 
 $gpdf = new Gpdf($config);
 $sslVerify = false;
-$file = $gpdf->generateWithStore($content,null,null, false , $sslVerify); // $sslVerify must be true in production
+$file = $gpdf->generateWithStore($content, null, null, false, $sslVerify); // يجب تفعيل sslVerify في الإنتاج.
 $fileUrl = $file['ObjectURL'];
 
-return $fileUrl;  // get file url as string to store it in db or do any action
+return $fileUrl;  // يعيد عنوان URL للملف كسلسلة نصية لتخزينه أو استخدامه.
 ```
-#### generateWithStore params
 
-| Parameter                           | Type   | Description                                                                                   |
-|-------------------------------------|--------|-----------------------------------------------------------------------------------------------|
-| `html file`                         | string | The HTML content to be stored.                                                                |
-| `store path or bucket name with s3` | string | The path where the file will be stored, with S3 store this should bucket name.                |
-| `file name`                         | string | The name of the file.                                                                         |
-| `with stream`                       | bool   | If you need to stream the file to the browser after storing, set this to `true`.              |
-| `sslVerify`                         | bool   | If `with stream` is set to `true`, you should set this to `true` in production to verify SSL. |
+#### معايير generateWithStore
 
-#### Store Files To S3
-same to store in local, just replace local path with bucket name, and replace `generateWithStore` with `generateWithStoreToS3` .
+| المعامل                              | النوع   | الوصف                                                                                         |
+|--------------------------------------|---------|-----------------------------------------------------------------------------------------------|
+| `html file`                          | string  | المحتوى HTML الذي سيتم تحويله وتخزينه.                                                          |
+| `مسار التخزين أو اسم الدلو لـ S3`     | string  | المسار الذي سيتم تخزين الملف فيه، ومع S3 يجب أن يكون اسم الدلو (bucket name).                  |
+| `اسم الملف`                          | string  | اسم الملف المراد حفظه.                                                                         |
+| `with stream`                        | bool    | إذا كنت ترغب في عرض الملف مباشرة بعد التخزين، قم بتعيين القيمة إلى `true`.                    |
+| `sslVerify`                          | bool    | إذا تم تعيين `with stream` إلى `true`، يجب تعيين هذا إلى `true` في الإنتاج للتحقق من SSL.       |
+
+#### تخزين الملفات على S3
+
+بنفس طريقة التخزين المحلي، فقط استبدل مسار التخزين المحلي باسم الدلو، واستبدل `generateWithStore` بـ `generateWithStoreToS3`.
 
 ```php
 <?php
@@ -272,54 +275,56 @@ $config = new GpdfConfig($gpdfConfigFile);
 $gpdf = new Gpdf($config);
 $fileName = "pdf-file-with-store-to-s3";
 $sslVerify = true;
-$file = $gpdf->generateWithStoreToS3($content,null,$fileName, true, $sslVerify);
+$file = $gpdf->generateWithStoreToS3($content, null, $fileName, true, $sslVerify);
 $fileUrl = $file['ObjectURL'];
 ```
 
-### [Demo Native PHP App](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo)
-please see this Demo Native PHP app contain more detailed examples and cases like pass dynamic parameters for html file & pass inline configs , .. and another cases.
+### [تطبيق PHP توضيحي](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo)
+يمكنك مراجعة هذا التطبيق التوضيحي للحصول على أمثلة مفصلة حول تمرير المعاملات الديناميكية للملفات HTML وتمرير الإعدادات مدمجة وغيرها من الحالات.
 
 ---
 
-## Supported Fonts
-Gpdf supports the following installed fonts (ready to use without any additional configurations):
+## الخطوط المدعومة
 
-[Supported Fonts](https://github.com/omaralalwi/Gpdf/blob/9e2342d43066169049bff5a72435e421f0b21daa/src/Enums/GpdfDefaultSupportedFonts.php)
+يدعم Gpdf الخطوط التالية المثبتة (جاهزة للاستخدام دون إعداد إضافي):
 
-## Support for Arabic
+[الخطوط المدعومة](https://github.com/omaralalwi/Gpdf/blob/9e2342d43066169049bff5a72435e421f0b21daa/src/Enums/GpdfDefaultSupportedFonts.php)
 
-Gpdf supports Arabic content out-of-the-box. Simply pass Arabic text within your HTML content. Make sure to use Arabic fonts, which are included by default.
+## الدعم للغة العربية
 
-### Supported Arabic Fonts
+يدعم Gpdf المحتوى العربي بشكل افتراضي. قم بتمرير النصوص العربية ضمن محتوى HTML الخاص بك. تأكد من استخدام الخطوط العربية، حيث أنها مدمجة بشكل افتراضي.
 
-The following built-in fonts support Arabic:
+### الخطوط العربية المدعومة
 
-`DejaVu Sans Mono` , `Tajawal` , `Almarai` , `Cairo` , `Noto Naskh Arabic` , `Markazi Text` .
+تشمل الخطوط المدمجة التي تدعم اللغة العربية:
 
-We Recommended to Use font name from `Omaralalwi\Gpdf\Enums\GpdfDefaultSupportedFonts` Enum class , like `default font name` in config file .
-### Examples
+`DejaVu Sans Mono`، `Tajawal`، `Almarai`، `Cairo`، `Noto Naskh Arabic`، `Markazi Text`.
 
-- [Native PHP example](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo/blob/master/generateArPdf.php)
-- [Laravel example](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/c68bfbc84015d7eb0d3f473929cff488dc42ad9f/app/Http/Controllers/GpdfController.php#L74)
+ننصح باستخدام اسم الخط من فئة `Omaralalwi\Gpdf\Enums\GpdfDefaultSupportedFonts` مثل "default font name" في ملف الإعدادات.
+
+### أمثلة
+
+- [مثال باستخدام PHP التقليدي](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo/blob/master/generateArPdf.php)
+- [مثال باستخدام Laravel](https://github.com/omaralalwi/Gpdf-Laravel-Demo/blob/c68bfbc84015d7eb0d3f473929cff488dc42ad9f/app/Http/Controllers/GpdfController.php#L74)
 
 ---
 
-## Installing Custom Fonts
+## تثبيت الخطوط المخصصة
 
-To install custom font, follow these steps:
+لتثبيت خط مخصص، اتبع الخطوات التالية:
 
-1. Ensure the default fonts are published to `public/vendor/gpdf/fonts`.
-2. Prepare at least one font (Normal) for each family `(Normal, Bold, Italic, BoldItalic)`.
-3. Copy the fonts to any path (**not the default fonts path**).
-4. The font family name must be enclosed in double quotes and written in lowercase.
-5. fonts names must be in kebab case with capitalize.
-6. Run install font script with the following command:
+1. تأكد من نشر الخطوط الافتراضية إلى `public/vendor/gpdf/fonts`.
+2. جهز على الأقل خطًا (Normal) لكل نمط من الأنماط (Normal, Bold, Italic, BoldItalic).
+3. انسخ الخطوط إلى أي مسار **غير مسار الخطوط الافتراضي**.
+4. يجب أن يكون اسم عائلة الخط محاطًا بعلامات اقتباس مزدوجة ومكتوبًا بأحرف صغيرة.
+5. يجب أن تكون أسماء الخطوط بصيغة kebab case مع كتابة أول حرف كبير.
+6. شغّل سكربت تثبيت الخط باستخدام الأمر التالي:
 
 ```bash
-php vendor/omaralalwi/gpdf/scripts/install_font.php "family name" ./path_to_font/Font-Normal.ttf ./path_to_font/Font-Bold.ttf ./resources/fonts/Tajawal-Italic.ttf ./path_to_font/Font-BoldItalic.ttf
+php vendor/omaralalwi/gpdf/scripts/install_font.php "اسم العائلة" ./path_to_font/Font-Normal.ttf ./path_to_font/Font-Bold.ttf ./resources/fonts/Tajawal-Italic.ttf ./path_to_font/Font-BoldItalic.ttf
 ```
 
-For example, to install the `Tajawal` font family:
+على سبيل المثال، لتثبيت عائلة خط `Tajawal`:
 
 ```bash
 php vendor/omaralalwi/gpdf/scripts/install_font.php "tajawal" ./resources/fonts/Tajawal-Normal.ttf ./resources/fonts/Tajawal-Bold.ttf ./resources/fonts/Tajawal-Italic.ttf ./resources/fonts/Tajawal-BoldItalic.ttf
@@ -327,43 +332,43 @@ php vendor/omaralalwi/gpdf/scripts/install_font.php "tajawal" ./resources/fonts/
 
 ---
 
-## Features
+## الميزات
 
-- Compatibility with any Standard PHP application, Or framework.
-- store pdf files to S3 or local storage directly.
-- stream pdf files from urls (local or s3).
-- Supports 17 fonts by default, including 7 that support Arabic.
-- Allows for the installation of custom fonts.
-- Provides easy integration with Laravel applications.
-- Offers customizable options for PDF generation.
-- Includes detailed documentation.
-- provide demo applications for quick start-up [Demo Native PHP App](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo) , [Demo Laravel App](https://github.com/omaralalwi/Gpdf-Laravel-Demo) .
-- Unit Tests Includes unit tests.
+- التوافق مع أي تطبيق PHP قياسي أو إطار عمل.
+- إمكانية تخزين ملفات PDF على S3 أو على التخزين المحلي مباشرة.
+- عرض ملفات PDF مباشرة من عناوين URL (محلي أو S3).
+- دعم 17 خطاً بشكل افتراضي، بما في ذلك 7 خطوط تدعم اللغة العربية.
+- إمكانية تثبيت الخطوط المخصصة.
+- تكامل سهل مع تطبيقات Laravel.
+- خيارات قابلة للتخصيص لتوليد ملفات PDF.
+- وثائق مفصلة.
+- تطبيقات توضيحية للبدء السريع: [تطبيق PHP توضيحي](https://github.com/omaralalwi/Gpdf-Native-PHP-Demo) و [تطبيق Laravel توضيحي](https://github.com/omaralalwi/Gpdf-Laravel-Demo).
+- يحتوي على اختبارات وحدية.
 
 ---
 
-## Thanks
+## الشكر
+
 - ### [dompdf](https://github.com/dompdf/dompdf)
 - ### [Ar-PHP](https://github.com/khaled-alshamaa/ar-php)
 
-
-## Testing
+## الاختبارات
 
 ```bash
 composer test
 ```
-or
+أو
 ```bash
 php run-tests.php
 ```
 
-## Changelog
+## سجل التغييرات
 
-See [CHANGELOG](CHANGELOG.md) for recent changes.
+راجع [CHANGELOG](CHANGELOG.md) لمعرفة التغييرات الأخيرة.
 
-## Contributors ✨
+## المساهمون ✨
 
-Thanks to these wonderful people for contributing to this project! 💖
+شكر وتقدير لهؤلاء الرائعين الذين ساهموا في هذا المشروع! 💖
 
 <table>
   <tr>
@@ -374,7 +379,7 @@ Thanks to these wonderful people for contributing to this project! 💖
         <sub><b>Omar Al Alwi</b></sub>
       </a>
       <br />
-      🏆 Owner
+      🏆 المالك
     </td>
     <!-- Contributors -->
     <td align="center">
@@ -384,24 +389,23 @@ Thanks to these wonderful people for contributing to this project! 💖
         <sub><b>Abesse Smahi</b></sub>
       </a>
       <br />
-      💻 Contributor
+      💻 المساهم
     </td>
   </tr>
 </table>
 
-Want to contribute? Check out the [contributing guidelines](./CONTRIBUTING.md) and submit a pull request! 🚀
+هل ترغب في المساهمة؟ يرجى مراجعة [إرشادات المساهمة](./CONTRIBUTING.md) وإرسال طلب سحب! 🚀
 
+## الأمان
 
-## Security
+إذا اكتشفت أي مشكلات تتعلق بالأمان، يرجى إرسال بريد إلكتروني إلى `omaralwi2010@gmail.com`.
 
-If you discover any security-related issues, please email `omaralwi2010@gmail.com`.
-
-## Credits
+## الاعتمادات
 
 - [Omar Alalwi](https://github.com/omaralalwi)
 
-## License
+## الترخيص
 
-The MIT License (MIT). See [LICENSE](LICENSE.md) for more information.
+رخصة MIT. راجع [LICENSE](LICENSE.md) لمزيد من المعلومات.
 
 ---
