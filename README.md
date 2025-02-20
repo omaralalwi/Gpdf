@@ -1,12 +1,19 @@
+# GPDF: Multilingual & Arabic PDF Generator for PHP/Laravel Applications
+
+[![GitHub Release](https://img.shields.io/github/v/release/omaralalwi/Gpdf?style=for-the-badge&include_prereleases)](https://github.com/omaralalwi/Gpdf/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/omaralalwi/gpdf?style=for-the-badge)](https://packagist.org/packages/omaralalwi/gpdf)
+[![GitHub Stars](https://img.shields.io/github/stars/omaralalwi/Gpdf?style=for-the-badge)](https://github.com/omaralalwi/Gpdf/stargazers)
+[![PHP Version](https://img.shields.io/packagist/php-v/omaralalwi/gpdf?style=for-the-badge)](https://php.net)
+[![License](https://img.shields.io/github/license/omaralalwi/Gpdf?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Maintained](https://img.shields.io/badge/Maintained-Yes-success?style=for-the-badge)](https://github.com/omaralalwi/Gpdf/graphs/commit-activity)
+
 <p align="center">
-  <a href="https://omaralalwi.github.io/Gpdf" target="_blank">
-    <img src="https://raw.githubusercontent.com/omaralalwi/Gpdf/master/public/images/gpdf-banner-bg.jpg" alt="Gpdf">
+  <a href="https://github.com/omaralalwi/Gpdf">
+    <img src="https://raw.githubusercontent.com/omaralalwi/Gpdf/master/public/images/gpdf-banner-bg.jpg" alt="GPDF: Arabic PDF Generator with S3 Storage | PHP/Laravel Package">
   </a>
 </p>
 
-# [Gpdf](https://github.com/omaralalwi/Gpdf) : HTML to PDF Converter for PHP & Laravel
-
-Open Source PHP Package for converting HTML to PDF in PHP & Laravel applications, support store to s3,  with out-of-the-box support for Arabic content and other languages. Extends [dompdf](https://github.com/dompdf/dompdf) to add new features and solve issues like Arabic language support.
+**GPDF** is a PHP/Laravel package for generating **Arabic, RTL, and multilingual PDFs** with native support for 17 built-in Arabic fonts, S3 cloud storage, and enterprise-ready features. Built as a DomPDF extension, it solves Arabic rendering issues while adding modern capabilities for documents, invoices, and reports.
 
 ---
 
