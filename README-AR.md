@@ -1,6 +1,6 @@
 # GPDF: Multilingual & Arabic PDF Generator for PHP/Laravel Applications
 
-[![GitHub Release](https://img.shields.io/github/v/release/omaralalwi/Gpdf?style=for-the-badge&include_prereleases)](https://github.com/omaralalwi/Gpdf/releases)
+[![Latest Version](https://img.shields.io/packagist/v/omaralalwi/gpdf?style=for-the-badge)](https://packagist.org/packages/omaralalwi/gpdf)
 [![Total Downloads](https://img.shields.io/packagist/dt/omaralalwi/gpdf?style=for-the-badge)](https://packagist.org/packages/omaralalwi/gpdf)
 [![GitHub Stars](https://img.shields.io/github/stars/omaralalwi/Gpdf?style=for-the-badge)](https://github.com/omaralalwi/Gpdf/stargazers)
 [![PHP Version](https://img.shields.io/packagist/php-v/omaralalwi/gpdf?style=for-the-badge)](https://php.net)
