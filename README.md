@@ -5,7 +5,6 @@
 [![GitHub Stars](https://img.shields.io/github/stars/omaralalwi/Gpdf?style=for-the-badge)](https://github.com/omaralalwi/Gpdf/stargazers)
 [![PHP Version](https://img.shields.io/packagist/php-v/omaralalwi/gpdf?style=for-the-badge)](https://php.net)
 [![License](https://img.shields.io/github/license/omaralalwi/Gpdf?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Maintained](https://img.shields.io/badge/Maintained-Yes-success?style=for-the-badge)](https://github.com/omaralalwi/Gpdf/graphs/commit-activity)
 
 <p align="center">
   <a href="https://github.com/omaralalwi/Gpdf">
