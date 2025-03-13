@@ -5,7 +5,7 @@ namespace Omaralalwi\Gpdf\Enums;
 class GpdfDefaultSettings
 {
     const TEMP_DIR = null;
-    // note: last slash after fonts cleared in config file because real{ath function , so you must add it in config file
+    // note: last slash after fonts cleared in config file because real path function , so you must add it in config file
     const FONT_DIR = '/../public/vendor/gpdf/fonts';
     const FONT_CACHE = '/../public/vendor/gpdf/fonts'; // make it same FONT_DIR to avoid cache problems
     const CHROOT = null;
