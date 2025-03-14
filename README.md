@@ -62,7 +62,7 @@ composer require omaralalwi/gpdf
 ```
 ### IMPORTANT NOTE:
 
-if you have old version with some issues, please delete old config file , then update package , then publish config file again .
+if you have old version with some issues, please delete old config file , then delete package from composer file , then re-install it , then publish config file again .
 
 ## Publish Resources
 
