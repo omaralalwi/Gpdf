@@ -21,7 +21,7 @@ return [
      * Temporary directory for storing temporary PDF files.
      * @var string|null
      */
-    GpdfSet::TEMP_DIR => GpdfDefault::TEMP_DIR,
+    GpdfSet::TEMP_DIR => sys_get_temp_dir(),
 
     /**
      * Directory for storing font files.
@@ -74,7 +74,7 @@ return [
      * Chroot directory for security purposes.
      * @var string|null
      */
-    GpdfSet::CHROOT => GpdfDefault::CHROOT,
+    GpdfSet::CHROOT => realpath(dirname(__DIR__)),
 
     GpdfSet::STORAGE_PATH => GpdfDefault::STORAGE_PATH,
 

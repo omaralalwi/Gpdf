@@ -8,9 +8,13 @@ class GpdfDefaultSettings
     // note: last slash after fonts cleared in config file because real path function , so you must add it in config file
     const FONT_DIR = '/../public/vendor/gpdf/fonts';
     const FONT_CACHE = '/../public/vendor/gpdf/fonts'; // make it same FONT_DIR to avoid cache problems
-    const CHROOT = null;
     const CONVERT_ENTITIES = true;
-    const ALLOWED_PROTOCOLS = ['http', 'https'];
+    const ALLOWED_PROTOCOLS = [
+        'data://' => ['rules' => []],
+        'file://' => ['rules' => []],
+        'http://' => ['rules' => []],
+        'https://' => ['rules' => []],
+    ];
     const ARTIFACT_PATH_VALIDATION = true;
     const LOG_OUTPUT_FILE = null;
     const STORAGE_PATH = '/public/downloads/pdfs/';
