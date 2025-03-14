@@ -20,6 +20,7 @@
 
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Important Note](#important-note)
 - [Publish Resources](#publish-resources)
 - [Publish Config](#publish-config-file)
 - [Usage with Laravel](#usage-with-laravel)
