@@ -21,6 +21,7 @@
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Publish Resources](#publish-resources)
+- [Publish Config](#publish-config-file)
 - [Usage with Laravel](#usage-with-laravel)
   - [Using the Gpdf Facade](#using-the-gpdf-facade)
   - [Using Dependency Injection](#using-dependency-injection)
@@ -59,6 +60,9 @@
 ```bash
 composer require omaralalwi/gpdf
 ```
+### IMPORTANT NOTE:
+
+if you have old version with some issues, please delete old config file , then update package , then publish config file again .
 
 ## Publish Resources
 
@@ -66,9 +70,15 @@ After installation, publish the config and fonts resources by running the follow
 
 ```bash
 php vendor/omaralalwi/gpdf/scripts/publish_fonts.php
+```
 
+## Publish Config File
+
+```bash
 php vendor/omaralalwi/gpdf/scripts/publish_config.php
 ```
+
+---
 
 **Note for Publish Issues:** If you encounter any issues while publishing, manually copy the `vendor/omaralalwi/gpdf/assets/fonts` folder to `public/vendor/gpdf` and ensure the fonts are in `public/vendor/gpdf/fonts`. Also, copy `vendor/omaralalwi/gpdf/config/gpdf.php` to the `/config` folder in the root path.
 
