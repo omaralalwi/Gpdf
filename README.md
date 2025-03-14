@@ -420,3 +420,10 @@ If you discover any security-related issues, please email `omaralwi2010@gmail.co
 The MIT License (MIT). See [LICENSE](LICENSE.md) for more information.
 
 ---
+
+# ✨ **GPDF Community** ✨
+
+Click the button bellow or [join here](https://t.me/gpdf_community) to be part of our growing community!
+
+[![Join Telegram](https://img.shields.io/badge/Join-Telegram-blue?style=for-the-badge&logo=telegram)](https://t.me/deepseek_php_community)
+
