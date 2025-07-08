@@ -3,9 +3,19 @@
     "description": "Custom PDF wrapper supporting Arabic language",
     "keywords": [
         "gpdf",
+        "pdf",
+        "pdf-generator",
+        "php-pdf",
+        "dompdf-wrapper",
+        "generate-pdf",
+        "export-pdf",
+        "html-to-pdf",
+        "pdf-creation",
+        "invoice-pdf" ,
         "arabic-pdf",
         "laravel-pdf",
         "rtl-pdf",
+        "s3-pdf-storage",
         "arabic-fonts",
         "pdf-generation",
         "arabic-pdf-php",
@@ -47,7 +57,7 @@
         }
     ],
     "require": {
-        "php": "^8.1|^8.2|^8.3",
+        "php": "^8.1|^8.2|^8.3|^8.4",
         "aws/aws-sdk-php": "^3.308",
         "dompdf/dompdf": "^3.0",
         "khaled.alshamaa/ar-php": "^6.3"
