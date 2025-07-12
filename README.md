@@ -83,6 +83,7 @@ php vendor/omaralalwi/gpdf/scripts/publish_fonts.php
 ```bash
 php vendor/omaralalwi/gpdf/scripts/publish_config.php
 ```
+**Note: You must add generated files to git by ```git add public/vendor/gpdf/fonts/*.* -f``` to ensure the fonts added to production | or run publish command again in production.
 
 ---
 
