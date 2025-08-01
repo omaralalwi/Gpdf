@@ -78,6 +78,14 @@ After installation, publish the config and fonts resources by running the follow
 php vendor/omaralalwi/gpdf/scripts/publish_fonts.php
 ```
 
+> ⚠️ **Important Notes:**
+>
+> * This step **must be executed in production environments** as well — otherwise, the package will not function properly (fonts will be missing).
+> * If you can not run scripts in production, you can **manually copy the `public/vendor/gpdf` folder** to your production environment.
+> * Ensure the `public/vendor/gpdf` folder is **writable** and publicly accessible by the web server.
+
+---
+
 ## Publish Config File
 
 ```bash
@@ -431,7 +439,7 @@ Click the button bellow or [join here](https://t.me/gpdf_community) to be part o
 
 ---
 
-## 📚 Helpful Open Source Packages & Projects
+# 📚 ✨ My Open Source Packages & Projects ✨
 
 ### Packages
 
@@ -449,8 +457,8 @@ Click the button bellow or [join here](https://t.me/gpdf_community) to be part o
 
 - <a href="https://github.com/omaralalwi/php-builders"><img src="https://repository-images.githubusercontent.com/917404875/c5fbf4c9-d41f-44c6-afc6-0d66cf7f4c4f" width="26" height="26" style="border-radius:13px;" alt="PHP builders" /> **PHP builders** </a> sample php traits to add ability to use builder design patterns with easy in PHP applications.
 
-- <a href="https://github.com/omaralalwi/php-py"> <img src="https://avatars.githubusercontent.com/u/25439498?v=4" width="26" height="26" style="border-radius:13px;" alt="PhpPy - PHP Python" /> **PhpPy - PHP Python** </a> Interact with python in PHP applications.
-
+- <a href="https://github.com/omaralalwi/php-py"> <img src="https://avatars.githubusercontent.com/u/25439498?v=4" width="26" height="26" style="border-radius:13px;" alt="PhpPy - PHP Python" /> **PhpPy - PHP Python** </a> Interact with python in PHP applications .
+  
 - <a href="https://github.com/omaralalwi/laravel-py"><img src="https://avatars.githubusercontent.com/u/25439498?v=4" width="26" height="26" style="border-radius:13px;" alt="Laravel Py - Laravel Python" /> **Laravel Py - Laravel Python** </a> interact with python in Laravel applications.
 
 - <a href="https://github.com/deepseek-php/deepseek-php-client"><img src="https://avatars.githubusercontent.com/u/193405629?s=200&v=4" width="26" height="26" style="border-radius:13px;" alt="Deepseek PHP client" /> **deepseek PHP client** </a> robust and community-driven PHP client library for seamless integration with the Deepseek API, offering efficient access to advanced AI and data processing capabilities .
