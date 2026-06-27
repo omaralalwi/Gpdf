@@ -68,6 +68,30 @@ class GpdfTest extends TestCase
         $this->assertStringContainsString('%PDF', $pdf, "PDF content does not contain valid PDF header");
     }
 
+    public function testArabicPercentSignDoesNotHideContent()
+    {
+        // Regression for https://github.com/omaralalwi/Gpdf/issues/13
+        // The Arabic percent sign "٪" (U+066A) lives in the Arabic Unicode
+        // block but has no glyph form in the shaper, which used to emit a
+        // broken glyph entity and hide the surrounding line. It must now
+        // render just like the ASCII "%" version.
+        $gpdf = new Gpdf($this->config);
+
+        $withArabicPercent = "<p>احصل على خصم 10٪ على جميع المشتريات.</p>";
+        $withAsciiPercent  = "<p>احصل على خصم 10% على جميع المشتريات.</p>";
+
+        $pdfArabic = $gpdf->generate($withArabicPercent);
+        $pdfAscii  = $gpdf->generate($withAsciiPercent);
+
+        $this->assertStringContainsString('%PDF', $pdfArabic, "Arabic percent sign should still produce a valid PDF");
+        $this->assertStringStartsWith('%PDF', $pdfArabic, "Output must be a PDF, not a caught error string");
+        $this->assertSame(
+            strlen($pdfAscii),
+            strlen($pdfArabic),
+            "Arabic percent sign must be normalized to the same output as the ASCII percent sign"
+        );
+    }
+
     public function testUtf8GlyphsCalledWithSpecificParams()
     {
         $arabicMock = $this->createMock(Arabic::class);

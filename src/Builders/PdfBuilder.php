@@ -150,6 +150,8 @@ class PdfBuilder
 
     public function formatArabic($htmlContent)
     {
+        $htmlContent = $this->normalizeArabicSymbols($htmlContent);
+
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
 
@@ -175,6 +177,33 @@ class PdfBuilder
         $standardArabicNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
         return str_replace($easternArabicNumerals, $standardArabicNumerals, $text);
+    }
+
+    /**
+     * Normalize Arabic-Indic symbols (U+066A..U+066D) to their standard
+     * equivalents before glyph shaping.
+     *
+     * These characters fall inside the Arabic Unicode block, so the underlying
+     * Ar-PHP shaper treats them as Arabic but has no glyph form for them. That
+     * produces a broken/empty glyph entity which makes the surrounding text
+     * disappear in the rendered PDF (e.g. the Arabic percent sign "٪"). Mapping
+     * them to the ASCII equivalents — which render correctly — keeps the
+     * content intact. See https://github.com/omaralalwi/Gpdf/issues/13
+     *
+     * @param string $text
+     * @return string
+     */
+    private function normalizeArabicSymbols(string $text): string
+    {
+        $arabicSymbols = [
+            '٪', // U+066A ARABIC PERCENT SIGN
+            '٫', // U+066B ARABIC DECIMAL SEPARATOR
+            '٬', // U+066C ARABIC THOUSANDS SEPARATOR
+            '٭', // U+066D ARABIC FIVE POINTED STAR
+        ];
+        $standardSymbols = ['%', '.', ',', '*'];
+
+        return str_replace($arabicSymbols, $standardSymbols, $text);
     }
 
     protected function convertEntities(string $subject): string
