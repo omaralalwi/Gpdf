@@ -68,6 +68,39 @@ class GpdfTest extends TestCase
         $this->assertStringContainsString('%PDF', $pdf, "PDF content does not contain valid PDF header");
     }
 
+    public function testMultilineArabicLinesAreLockedAgainstReversal()
+    {
+        // Regression for https://github.com/omaralalwi/Gpdf/issues/18
+        // Long Arabic wrapped by the shaper into several lines must be emitted
+        // as white-space:nowrap spans so the PDF engine cannot re-wrap (and
+        // thereby vertically reverse) a visually-ordered line.
+        $config = new GpdfConfig([
+            GpdfSettingKeys::FONT_DIR => realpath(__DIR__ . '/assets/fonts/'),
+            GpdfSettingKeys::FONT_CACHE => realpath(__DIR__ . '/assets/fonts/'),
+            GpdfSettingKeys::DEFAULT_FONT => GpdfDefaultSupportedFonts::DEJAVU_SANS,
+            GpdfSettingKeys::MAX_CHARS_PER_LINE => 10, // force multiple shaped lines
+        ]);
+
+        $dompdf = \Omaralalwi\Gpdf\Factories\DompdfFactory::create($config);
+        $builder = new PdfBuilder($dompdf, $config);
+
+        $longArabic = 'تُعدّ اللغة العربية واحدة من أقدم اللغات السامية وأكثرها استخدامًا في العالم';
+        $formatted = $builder->formatArabic("<td>{$longArabic}</td>");
+
+        $this->assertStringContainsString('white-space: nowrap', $formatted, 'Shaped lines must be locked with nowrap');
+        $this->assertGreaterThan(1, substr_count($formatted, '<br'), 'Long Arabic should produce several locked lines');
+        // every locked <span> must be balanced (no orphaned/unwrapped shaped line)
+        $this->assertSame(
+            substr_count($formatted, '<span style="white-space: nowrap;">'),
+            substr_count($formatted, '</span>'),
+            'Each shaped line must be wrapped in exactly one nowrap span'
+        );
+
+        // and the full pipeline still produces a valid PDF
+        $pdf = (new Gpdf($config))->generate("<table><tr><td>{$longArabic}</td></tr></table>");
+        $this->assertStringContainsString('%PDF', $pdf);
+    }
+
     public function testUtf8GlyphsCalledWithSpecificParams()
     {
         $arabicMock = $this->createMock(Arabic::class);

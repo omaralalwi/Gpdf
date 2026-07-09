@@ -51,12 +51,18 @@ return [
     GpdfSet::SHOW_NUMBERS_AS_HINDI => false,
 
     /**
+     * Max number of characters that fit on one line of shaped Arabic text.
      *
-     * Set Max number of chars you can fit in one line, default is 50
+     * Arabic is shaped and reversed line-by-line before rendering, then each
+     * shaped line is locked so the PDF engine renders it as a single row. For
+     * correct top-to-bottom line order, set this close to the character
+     * capacity of the narrowest container you render Arabic in (e.g. a table
+     * column). Too high a value may overflow narrow cells; too low produces
+     * unnecessarily short lines. See https://github.com/omaralalwi/Gpdf/issues/18
      *
      * @var integer
      */
-    GpdfSet::MAX_CHARS_PER_LINE => 100,
+    GpdfSet::MAX_CHARS_PER_LINE => 50,
 
     /**
      * Font height ratio setting.

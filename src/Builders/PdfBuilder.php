@@ -157,7 +157,7 @@ class PdfBuilder
 
         for ($i = count($p) - 1; $i >= 0; $i -= 2) {
             $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $max_chars);
-            $utf8ar = nl2br($utf8ar);
+            $utf8ar = $this->lockShapedLines($utf8ar);
 
             $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
@@ -167,6 +167,36 @@ class PdfBuilder
         }
 
         return $this->convertEntities($htmlContent);
+    }
+
+    /**
+     * Lock each shaped line so dompdf renders it as exactly one physical row.
+     *
+     * Ar-PHP's utf8Glyphs() reverses every line into right-to-left *visual*
+     * order, assuming each line stays a single rendered line, and inserts a
+     * "\n" wherever it wraps at maxCharsPerLine. If dompdf then re-wraps such a
+     * line — which happens whenever the container (e.g. a table cell) is
+     * narrower than maxCharsPerLine — the resulting rows come out vertically
+     * reversed, i.e. bottom-to-top.
+     *
+     * Wrapping each shaped line in a white-space:nowrap span prevents that
+     * re-wrap, so one shaped line always maps to one row and the reading order
+     * is preserved. Keep maxCharsPerLine close to the character capacity of the
+     * narrowest container the text is rendered in, otherwise a locked line can
+     * overflow instead of wrapping. See
+     * https://github.com/omaralalwi/Gpdf/issues/18
+     *
+     * @param string $shaped Glyph-joined, visually ordered text from utf8Glyphs()
+     * @return string
+     */
+    private function lockShapedLines(string $shaped): string
+    {
+        $lines = array_map(
+            static fn ($line) => '<span style="white-space: nowrap;">' . $line . '</span>',
+            explode("\n", str_replace("\r", '', $shaped))
+        );
+
+        return implode('<br />', $lines);
     }
 
     private function convertArabicNumbers($text)
