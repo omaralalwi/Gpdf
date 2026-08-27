@@ -152,10 +152,6 @@ class PdfBuilder
     {
         $htmlContent = $this->normalizeArabicSymbols($htmlContent);
         $htmlContent = $this->normalizeArabicLetters($htmlContent);
-        $htmlContent = $this->normalizeArabicDigits($htmlContent);
-
-        $numericTokens = [];
-        $htmlContent = $this->protectNumericTokens($htmlContent, $numericTokens);
 
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
@@ -164,17 +160,17 @@ class PdfBuilder
         $showNumbersAsHindi = (bool) $this->gpdfConfig->get(GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI);
 
         for ($i = count($p) - 1; $i >= 0; $i -= 2) {
-            $utf8ar = $Arabic->utf8Glyphs(
-                substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]),
-                $max_chars,
-                $showNumbersAsHindi
-            );
+            $fragment = $this->normalizeArabicDigits(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]));
+
+            $numericTokens = [];
+            $fragment = $this->protectNumericTokens($fragment, $numericTokens);
+
+            $utf8ar = $Arabic->utf8Glyphs($fragment, $max_chars, $showNumbersAsHindi);
+            $utf8ar = $this->restoreNumericTokens($utf8ar, $numericTokens, $showNumbersAsHindi);
             $utf8ar = $this->lockShapedLines($utf8ar);
 
             $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
-
-        $htmlContent = $this->restoreNumericTokens($htmlContent, $numericTokens, $showNumbersAsHindi);
 
         if (!$showNumbersAsHindi) {
             $htmlContent = $this->convertArabicNumbers($htmlContent);
@@ -290,7 +286,8 @@ class PdfBuilder
      * digits are treated as ordinary letters instead, so "١٠.٥٧" came out of the
      * shaper reversed as "٧٥.٠١". Feeding the shaper ASCII digits keeps the
      * number readable; utf8Glyphs() renders them back as Arabic-Indic when
-     * SHOW_NUMBERS_AS_HINDI is enabled.
+     * SHOW_NUMBERS_AS_HINDI is enabled. This runs per Arabic fragment, so digits
+     * elsewhere in the document — markup, CSS values — are never touched.
      * See https://github.com/omaralalwi/Gpdf/issues/12
      *
      * @param string $text
@@ -320,7 +317,7 @@ class PdfBuilder
      * where the number belongs; restoreNumericTokens() then puts the real number
      * back. See https://github.com/omaralalwi/Gpdf/issues/12
      *
-     * @param string $text
+     * @param string $text An Arabic fragment, not the whole document
      * @param array<string,string> $numericTokens Filled with placeholder => number
      * @return string
      */
@@ -329,7 +326,8 @@ class PdfBuilder
         $numericTokens = [];
         $source = $text;
 
-        return preg_replace_callback(
+        // no /u modifier: match ASCII digits only, and stay safe on odd byte sequences
+        $protected = preg_replace_callback(
             '/\d+(?:[.,]\d+)+/',
             function (array $match) use (&$numericTokens, $source) {
                 $placeholder = $this->buildNumericPlaceholder(strlen($match[0]), $source, $numericTokens);
@@ -344,11 +342,13 @@ class PdfBuilder
             },
             $text
         );
+
+        return $protected ?? $text;
     }
 
     /**
      * Build a digit-only placeholder of an exact length that appears nowhere in
-     * the document and has not been handed out yet.
+     * the fragment and has not been handed out yet.
      *
      * @param int $length
      * @param string $text

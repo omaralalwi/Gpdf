@@ -164,6 +164,40 @@ class GpdfTest extends TestCase
         );
     }
 
+    public function testStandaloneNumbersKeepTheConfiguredNumeralSystem()
+    {
+        // A number with no Arabic letters beside it is still an Arabic fragment,
+        // so it must keep its order AND the configured numeral system.
+        $hindi = $this->makeBuilder($this->makeConfig([GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI => true]));
+        $this->assertStringContainsString('١٢٣٤', $hindi->formatArabic('<p>١٢٣٤</p>'));
+        $this->assertStringContainsString('١٠.٥٧', $hindi->formatArabic('<td>١٠.٥٧</td>'));
+
+        $ascii = $this->makeBuilder();
+        $this->assertStringContainsString('1234', $ascii->formatArabic('<p>١٢٣٤</p>'));
+    }
+
+    public function testMarkupOutsideArabicFragmentsIsUntouched()
+    {
+        $builder = $this->makeBuilder();
+
+        // numbers living in markup must survive the number protection unchanged
+        $this->assertSame(
+            '<p>Total: 10.57 USD</p>',
+            $builder->formatArabic('<p>Total: 10.57 USD</p>'),
+            'Documents without Arabic must pass through unchanged'
+        );
+        $this->assertStringContainsString(
+            'style="width:10.5px"',
+            $builder->formatArabic('<p style="width:10.5px">نص عربي هنا</p>'),
+            'CSS values must not be rewritten'
+        );
+        $this->assertStringContainsString(
+            'colspan="2"',
+            $builder->formatArabic('<td colspan="2">عربي</td>'),
+            'Attributes must not be rewritten'
+        );
+    }
+
     private function makeConfig(array $overrides = []): GpdfConfig
     {
         return new GpdfConfig(array_merge([
