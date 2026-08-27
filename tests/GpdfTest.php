@@ -101,6 +101,86 @@ class GpdfTest extends TestCase
         $this->assertStringContainsString('%PDF', $pdf);
     }
 
+    public function testArabicPercentSignDoesNotHideContent()
+    {
+        // Regression for https://github.com/omaralalwi/Gpdf/issues/13
+        // "٪" (U+066A) lives in the Arabic block but has no glyph form, so the
+        // shaper used to emit a malformed "&#x;" entity and swallow the text
+        // around it. It must now behave exactly like the ASCII "%".
+        $builder = $this->makeBuilder();
+
+        $this->assertSame(
+            $builder->formatArabic('<p>احصل على خصم 10% اليوم</p>'),
+            $builder->formatArabic('<p>احصل على خصم 10٪ اليوم</p>'),
+            'The Arabic percent sign must render like the ASCII percent sign'
+        );
+
+        $pdf = (new Gpdf($this->config))->generate('<p>احصل على خصم 10٪ اليوم</p>');
+        $this->assertStringStartsWith('%PDF', $pdf, 'Output must be a PDF, not a caught error string');
+    }
+
+    public function testArabicIndicNumbersKeepTheirOrder()
+    {
+        // Regression for https://github.com/omaralalwi/Gpdf/issues/12
+        // The shaper flushes each run of digits separately, so a separator used
+        // to split "١٠.٥٧" into two runs that came out reversed as "٧٥.٠١".
+        $shaped = $this->makeBuilder()->formatArabic('<p>المبلغ ١٠.٥٧ ريال</p>');
+
+        $this->assertStringContainsString('10.57', $shaped, 'The number must keep its order');
+        $this->assertStringNotContainsString('75.01', $shaped, 'The number must not be reversed');
+
+        $grouped = $this->makeBuilder()->formatArabic('<p>قيمة ١٢٣٬٤٥٦٫٧٨ ريال</p>');
+        $this->assertStringContainsString('123,456.78', $grouped, 'Grouped numbers must keep their order');
+    }
+
+    public function testArabicIndicNumbersKeepTheirOrderAsHindi()
+    {
+        // Same as above with SHOW_NUMBERS_AS_HINDI enabled: the number is
+        // restored in Arabic-Indic digits, still in reading order.
+        $config = $this->makeConfig([GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI => true]);
+        $shaped = $this->makeBuilder($config)->formatArabic('<p>المبلغ ١٠.٥٧ ريال</p>');
+
+        $this->assertStringContainsString('١٠.٥٧', $shaped, 'Hindi numerals must keep their order');
+    }
+
+    public function testPersianLetterVariantsRenderAsArabic()
+    {
+        // Regression for https://github.com/omaralalwi/Gpdf/issues/11
+        // Arabic typed on a Persian/Urdu keyboard uses letters arIdentify() does
+        // not scan for, which split one run into fragments that were each
+        // reversed on their own and scrambled the sentence.
+        $builder = $this->makeBuilder();
+
+        $this->assertSame(
+            $builder->formatArabic('<span>جهاز نقطة البيع</span>'),
+            $builder->formatArabic('<span>جھاز نقطة البیع</span>'),
+            'Persian letter variants must render as their Arabic equivalents'
+        );
+
+        $this->assertSame(
+            $builder->formatArabic('<p>كتاب جديد</p>'),
+            $builder->formatArabic('<p>کتاب جديد</p>'),
+            'Keheh must render as Arabic kaf'
+        );
+    }
+
+    private function makeConfig(array $overrides = []): GpdfConfig
+    {
+        return new GpdfConfig(array_merge([
+            GpdfSettingKeys::FONT_DIR => realpath(__DIR__ . '/assets/fonts/'),
+            GpdfSettingKeys::FONT_CACHE => realpath(__DIR__ . '/assets/fonts/'),
+            GpdfSettingKeys::DEFAULT_FONT => GpdfDefaultSupportedFonts::DEJAVU_SANS,
+            GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI => false,
+        ], $overrides));
+    }
+
+    private function makeBuilder(?GpdfConfig $config = null): PdfBuilder
+    {
+        $config = $config ?? $this->makeConfig();
+
+        return new PdfBuilder(\Omaralalwi\Gpdf\Factories\DompdfFactory::create($config), $config);
+    }
+
     public function testUtf8GlyphsCalledWithSpecificParams()
     {
         $arabicMock = $this->createMock(Arabic::class);

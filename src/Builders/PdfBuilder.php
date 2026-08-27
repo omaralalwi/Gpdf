@@ -150,19 +150,33 @@ class PdfBuilder
 
     public function formatArabic($htmlContent)
     {
+        $htmlContent = $this->normalizeArabicSymbols($htmlContent);
+        $htmlContent = $this->normalizeArabicLetters($htmlContent);
+        $htmlContent = $this->normalizeArabicDigits($htmlContent);
+
+        $numericTokens = [];
+        $htmlContent = $this->protectNumericTokens($htmlContent, $numericTokens);
+
         $Arabic = new Arabic();
         $p = $Arabic->arIdentify($htmlContent);
 
         $max_chars = $this->gpdfConfig->get(GpdfSettingKeys::MAX_CHARS_PER_LINE);
+        $showNumbersAsHindi = (bool) $this->gpdfConfig->get(GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI);
 
         for ($i = count($p) - 1; $i >= 0; $i -= 2) {
-            $utf8ar = $Arabic->utf8Glyphs(substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]), $max_chars);
+            $utf8ar = $Arabic->utf8Glyphs(
+                substr($htmlContent, $p[$i - 1], $p[$i] - $p[$i - 1]),
+                $max_chars,
+                $showNumbersAsHindi
+            );
             $utf8ar = $this->lockShapedLines($utf8ar);
 
             $htmlContent   = substr_replace($htmlContent, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
         }
 
-        if (!$this->gpdfConfig->get(GpdfSettingKeys::SHOW_NUMBERS_AS_HINDI)) {
+        $htmlContent = $this->restoreNumericTokens($htmlContent, $numericTokens, $showNumbersAsHindi);
+
+        if (!$showNumbersAsHindi) {
             $htmlContent = $this->convertArabicNumbers($htmlContent);
         }
 
@@ -199,12 +213,225 @@ class PdfBuilder
         return implode('<br />', $lines);
     }
 
+    /**
+     * Normalize Arabic-Indic symbols (U+066A..U+066D) to their ASCII equivalents
+     * before glyph shaping.
+     *
+     * These characters sit inside the Arabic Unicode block, so the shaper treats
+     * them as Arabic letters, but it has no glyph form for them. It then emits a
+     * malformed "&#x;" entity, which silently swallows the character and can hide
+     * the surrounding text in the rendered PDF (e.g. the Arabic percent sign "٪").
+     * The ASCII equivalents render correctly and keep the content intact.
+     * See https://github.com/omaralalwi/Gpdf/issues/13
+     *
+     * @param string $text
+     * @return string
+     */
+    private function normalizeArabicSymbols(string $text): string
+    {
+        $arabicSymbols = [
+            '٪', // U+066A ARABIC PERCENT SIGN
+            '٫', // U+066B ARABIC DECIMAL SEPARATOR
+            '٬', // U+066C ARABIC THOUSANDS SEPARATOR
+            '٭', // U+066D ARABIC FIVE POINTED STAR
+        ];
+        $standardSymbols = ['%', '.', ',', '*'];
+
+        return str_replace($arabicSymbols, $standardSymbols, $text);
+    }
+
+    /**
+     * Normalize Persian/Urdu letter variants to their Arabic equivalents.
+     *
+     * Arabic text is often typed on a Persian or Urdu keyboard, which produces
+     * letters the shaper has no glyph form for (e.g. "ھ" U+06BE instead of "ه").
+     * Those letters also fall outside the range arIdentify() scans, so they split
+     * one Arabic run into several fragments that each get reversed on their own —
+     * scrambling the whole sentence. Mapping them onto the Arabic letters they
+     * stand for keeps the run intact and renders correctly.
+     * See https://github.com/omaralalwi/Gpdf/issues/11
+     *
+     * Letters that carry a sound Arabic has no equivalent for ("پ", "چ", "ژ",
+     * "گ") are deliberately left alone, so genuine Persian words keep their
+     * meaning. The shaper has no glyph form for most of them, so Persian text
+     * still renders unshaped — Gpdf targets Arabic.
+     *
+     * @param string $text
+     * @return string
+     */
+    private function normalizeArabicLetters(string $text): string
+    {
+        $letterVariants = [
+            'ک' => 'ك', // U+06A9 KEHEH
+            'ی' => 'ي', // U+06CC FARSI YEH
+            'ھ' => 'ه', // U+06BE HEH DOACHASHMEE
+            'ہ' => 'ه', // U+06C1 HEH GOAL
+            'ۀ' => 'ة', // U+06C0 HEH WITH YEH ABOVE
+            'ۃ' => 'ة', // U+06C3 TEH MARBUTA GOAL
+            'ے' => 'ي', // U+06D2 YEH BARREE
+            'ۓ' => 'ي', // U+06D3 YEH BARREE WITH HAMZA ABOVE
+            'ۍ' => 'ي', // U+06CD YEH WITH TAIL
+            'ې' => 'ي', // U+06D0 E
+            'ٱ' => 'ا', // U+0671 ALEF WASLA
+            'ٲ' => 'أ', // U+0672 ALEF WITH WAVY HAMZA ABOVE
+            'ٳ' => 'إ', // U+0673 ALEF WITH WAVY HAMZA BELOW
+            "\xE2\x80\x8C" => '', // U+200C ZERO WIDTH NON-JOINER
+            "\xE2\x80\x8D" => '', // U+200D ZERO WIDTH JOINER
+        ];
+
+        return strtr($text, $letterVariants);
+    }
+
+    /**
+     * Normalize Arabic-Indic digits to ASCII digits before glyph shaping.
+     *
+     * The shaper only recognises ASCII digits as a number, and keeps those in
+     * left-to-right order while it reverses the Arabic around them. Arabic-Indic
+     * digits are treated as ordinary letters instead, so "١٠.٥٧" came out of the
+     * shaper reversed as "٧٥.٠١". Feeding the shaper ASCII digits keeps the
+     * number readable; utf8Glyphs() renders them back as Arabic-Indic when
+     * SHOW_NUMBERS_AS_HINDI is enabled.
+     * See https://github.com/omaralalwi/Gpdf/issues/12
+     *
+     * @param string $text
+     * @return string
+     */
+    private function normalizeArabicDigits(string $text): string
+    {
+        $easternArabicNumerals  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $extendedArabicNumerals = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        $standardArabicNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        return str_replace(
+            array_merge($easternArabicNumerals, $extendedArabicNumerals),
+            array_merge($standardArabicNumerals, $standardArabicNumerals),
+            $text
+        );
+    }
+
+    /**
+     * Replace every multi-group number with a digit-only placeholder of the same
+     * length, so glyph shaping cannot reorder it.
+     *
+     * arGlyphsPreConvert() walks a fragment backwards and flushes each run of
+     * digits the moment it hits a non-digit. A separator inside a number is such
+     * a non-digit, so "10.57" is emitted as two runs in reverse order — "57.10".
+     * A placeholder holds no separator, so it survives as a single run and lands
+     * where the number belongs; restoreNumericTokens() then puts the real number
+     * back. See https://github.com/omaralalwi/Gpdf/issues/12
+     *
+     * @param string $text
+     * @param array<string,string> $numericTokens Filled with placeholder => number
+     * @return string
+     */
+    private function protectNumericTokens(string $text, array &$numericTokens): string
+    {
+        $numericTokens = [];
+        $source = $text;
+
+        return preg_replace_callback(
+            '/\d+(?:[.,]\d+)+/',
+            function (array $match) use (&$numericTokens, $source) {
+                $placeholder = $this->buildNumericPlaceholder(strlen($match[0]), $source, $numericTokens);
+
+                if ($placeholder === null) {
+                    return $match[0];
+                }
+
+                $numericTokens[$placeholder] = $match[0];
+
+                return $placeholder;
+            },
+            $text
+        );
+    }
+
+    /**
+     * Build a digit-only placeholder of an exact length that appears nowhere in
+     * the document and has not been handed out yet.
+     *
+     * @param int $length
+     * @param string $text
+     * @param array<string,string> $used
+     * @return string|null Null when no free placeholder of that length exists
+     */
+    private function buildNumericPlaceholder(int $length, string $text, array $used): ?string
+    {
+        // a free candidate is normally found on the first try, so cap the scan
+        // instead of walking the full 10^length space for very long numbers
+        $limit = min(10 ** $length, 100000);
+
+        for ($candidate = 0; $candidate < $limit; $candidate++) {
+            $placeholder = str_pad((string) $candidate, $length, '0', STR_PAD_LEFT);
+
+            if (!isset($used[$placeholder]) && strpos($text, $placeholder) === false) {
+                return $placeholder;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Put the real numbers back in place of their placeholders.
+     *
+     * utf8Glyphs() rewrites digits inside Arabic fragments to Arabic-Indic when
+     * Hindi numerals are enabled, so a placeholder is looked up in both numeral
+     * systems and restored in whichever one it was found.
+     *
+     * @param string $text
+     * @param array<string,string> $numericTokens
+     * @param bool $showNumbersAsHindi
+     * @return string
+     */
+    private function restoreNumericTokens(string $text, array $numericTokens, bool $showNumbersAsHindi): string
+    {
+        if (empty($numericTokens)) {
+            return $text;
+        }
+
+        $search  = [];
+        $replace = [];
+
+        foreach ($numericTokens as $placeholder => $number) {
+            $search[]  = $placeholder;
+            $replace[] = $number;
+
+            if ($showNumbersAsHindi) {
+                $search[]  = $this->convertToArabicIndicNumbers($placeholder);
+                $replace[] = $this->convertToArabicIndicNumbers($number);
+            }
+        }
+
+        return str_replace($search, $replace, $text);
+    }
+
+    /**
+     * Render Arabic-Indic digits as ASCII digits.
+     *
+     * @param string $text
+     * @return string
+     */
     private function convertArabicNumbers($text)
     {
         $easternArabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
         $standardArabicNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
         return str_replace($easternArabicNumerals, $standardArabicNumerals, $text);
+    }
+
+    /**
+     * Render ASCII digits as Arabic-Indic digits.
+     *
+     * @param string $text
+     * @return string
+     */
+    private function convertToArabicIndicNumbers(string $text): string
+    {
+        $standardArabicNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $easternArabicNumerals  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+        return str_replace($standardArabicNumerals, $easternArabicNumerals, $text);
     }
 
     protected function convertEntities(string $subject): string
