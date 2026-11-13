@@ -25,7 +25,7 @@ class GpdfDefaultSettings
     const DPI = 96;
     const FONT_HEIGHT_RATIO = 1.1;
     const IS_PHP_ENABLED = false;
-    const IS_REMOTE_ENABLED = true;
+    const IS_REMOTE_ENABLED = false;
     const ALLOWED_REMOTE_HOSTS = [];
     const IS_JAVASCRIPT_ENABLED = false;
     const IS_HTML5_PARSER_ENABLED = false;
