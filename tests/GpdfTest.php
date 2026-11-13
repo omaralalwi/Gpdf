@@ -49,6 +49,26 @@ class GpdfTest extends TestCase
         $this->assertTrue(!is_null($defaultFont));
     }
 
+    public function testRemoteFetchIsDisabledByDefault()
+    {
+        $config = new GpdfConfig([
+            GpdfSettingKeys::FONT_DIR => realpath(__DIR__ . '/assets/fonts/'),
+            GpdfSettingKeys::FONT_CACHE => realpath(__DIR__ . '/assets/fonts/'),
+            GpdfSettingKeys::DEFAULT_FONT => GpdfDefaultSupportedFonts::DEJAVU_SANS,
+        ]);
+        $gpdf = new Gpdf($config);
+
+        $this->assertFalse(
+            $gpdf->getConfig()->get(GpdfSettingKeys::IS_REMOTE_ENABLED),
+            'IS_REMOTE_ENABLED must default to false to prevent SSRF via remote image/font/CSS URLs in caller-supplied HTML.'
+        );
+        $this->assertSame(
+            GpdfDefaultSettings::IS_REMOTE_ENABLED,
+            false,
+            'GpdfDefaultSettings::IS_REMOTE_ENABLED default changed; re-check the SSRF implications before loosening it.'
+        );
+    }
+
     public function testCreatePdf()
     {
         $gpdf = new Gpdf($this->config);
